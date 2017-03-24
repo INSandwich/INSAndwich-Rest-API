@@ -1,0 +1,26 @@
+{
+  "name": "insandwich-rest",
+  "version": "1.0.0",
+  "description": "This folder contains the code for our REST API. We used nodeJS Express to build it up.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/INSandwich/INSAndwich-Rest-API.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/INSandwich/INSAndwich-Rest-API/issues"
+  },
+  "homepage": "https://github.com/INSandwich/INSAndwich-Rest-API#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "nodemon": "^1.11.0",
+    "sqlite3": "^3.1.8"
+  }
+}
