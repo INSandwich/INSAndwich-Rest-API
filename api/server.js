@@ -11,10 +11,11 @@ app.use(bodyParser.urlencoded( {extended: true } ));
 app.use(bodyParser.json());
 var router = express.Router();
 
-router.get('/', function(req, res) {
+app.get('/', function(req, res) {
   res.json({
     message: "Welcome, this is the root of INSAndwich API."
   });
+  console.log("Client connected");
 });
 
 app.use(controllers);
