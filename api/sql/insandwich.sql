@@ -11,12 +11,9 @@ CREATE TABLE IF NOT EXISTS Roles(
   Name CHAR(50) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Permissions(
-  Id INTEGER PRIMARY KEY AUTOINCREMENT,
-  Name TEXT NOT NULL,
-  Role_Id INTEGER NOT NULL,
-  CONSTRAINT fk_role_id FOREIGN KEY (Role_Id) REFERENCES Roles(Id)
-);
+INSERT INTO Roles (Name) Values("Guest");
+INSERT INTO Roles (Name) Values("Customer");
+INSERT INTO Roles (Name) Values("Admin");
 
 CREATE TABLE IF NOT EXISTS Users(
   Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -27,7 +24,7 @@ CREATE TABLE IF NOT EXISTS Users(
   Password CHAR(254) NOT NULL,
   Adresse CHAR(300) NOT NULL,
   Tokens INTEGER default 0,
-  Role_Id INTEGER NOT NULL,
+  Role_Id INTEGER NOT NULL default 1,
   CONSTRAINT fk_role_id FOREIGN KEY (Role_Id) REFERENCES Roles(Id)
 );
 
