@@ -1,4 +1,4 @@
-var sqlite3 = require('sqlite3');
+var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('insandwich.db');
 var bcrypt = require('bcrypt');
 var IsEmail = require('isemail');
@@ -60,7 +60,7 @@ var users = {
             }
 
             db.run("INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Role_Id) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            [req.body.firstname, req.body.lastname, email, req.body.login, hashedAndSaltedPwd, req.body.adresse, req.body.roleId],
+            [req.body.firstname, req.body.lastname, email, req.body.login, hashedAndSaltedPwd, req.body.adresse],
             function(e, r) {
               if (e == null) {
                 res.status(200).json({
@@ -86,6 +86,19 @@ var users = {
 
   },
 
+  updateUserRole: function(req, res) {
+    db.run("UPDATE Users SET Role_Id = ? WHERE Id = ?", [req.body.roleid, req.params.id],
+      function(e, r) {
+        //console.log(this);
+        if((e == null) && (this.changes != 0)) {
+          res.status(200).json({ "message": "Successfully updated user role" });
+        }
+        else {
+          res.status(500).json({"error": "Error updating user role."})
+        }
+      }
+    );
+  },
   /*
 
   // Update a role in the database

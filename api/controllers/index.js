@@ -15,6 +15,7 @@ router.delete('/roles/:id', roles.delete);
 router.get('/users', users.getAll);
 router.get('/users/:id', users.getOne);
 router.post('/users', users.create);
+router.post('/users/:id', users.updateUserRole);
 router.delete('/users/:id', users.delete);
 
 module.exports = router;
