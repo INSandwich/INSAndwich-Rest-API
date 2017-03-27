@@ -20,10 +20,15 @@ var users = {
   getAll: function(req, res) {
     db.all("SELECT * FROM Users",
       function(e, r) {
-        if((r.length != 0) && (e == null))
+        if((r.length != 0) && (e == null)) {
           res.status(200).json(r);
-        else
-          res.status(500).json({ error: "Error retrieving users." }).end();
+        }
+        else if (r.length == 0) {
+          res.status(500).json({ error: "Error retrieving users.", detail: "No users in the database." }).end();
+        }
+        else {
+          res.status(500).json({ error: "Error retrieving users.", detail: e }).end();
+        }
       });
   },
 
@@ -34,8 +39,11 @@ var users = {
         if( (e == null) && (r.length != 0) ) {
           res.status(200).json(r);
         }
+        else if (r.length == 0) {
+          res.status(500).json({ error: "Error retrieving user.", detail: "No user with this Id." }).end();
+        }
         else {
-          res.status(500).json({ error: "Error retrieving user." }).end();
+          res.status(500).json({ error: "Error retrieving user.", detail: e }).end();
         }
       }
     )
@@ -59,7 +67,7 @@ var users = {
               res.status(500).json({error: "Please provide a correct email."}).end();
             }
 
-            db.run("INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Role_Id) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            db.run("INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse) VALUES (?, ?, ?, ?, ?, ?)",
             [req.body.firstname, req.body.lastname, email, req.body.login, hashedAndSaltedPwd, req.body.adresse],
             function(e, r) {
               if (e == null) {
@@ -74,7 +82,7 @@ var users = {
                 });
               }
               else {
-                res.status(500).json({ error: "Error creating user." }).end();
+                res.status(500).json({ error: "Error creating user.", detail: e }).end();
               }
             });
         });
@@ -86,39 +94,63 @@ var users = {
 
   },
 
+  // Update the user's role
   updateUserRole: function(req, res) {
     db.run("UPDATE Users SET Role_Id = ? WHERE Id = ?", [req.body.roleid, req.params.id],
       function(e, r) {
         //console.log(this);
         if((e == null) && (this.changes != 0)) {
-          res.status(200).json({ "message": "Successfully updated user role" });
+          res.status(200).json({ message: "Successfully updated user role" });
         }
         else {
-          res.status(500).json({"error": "Error updating user role."})
+          res.status(500).json({error: "Error updating user role.", detail: e}).end();
         }
       }
     );
   },
+
+  // Update the token value
+  updateTokens: function(req, res) {
+
+    var tokens = req.body.tokens;
+
+    if(tokens > 0) {
+      db.run("UPDATE Users SET Tokens = ? WHERE Id = ?", [tokens, req.params.id],
+        function(e, r) {
+          if((e == null) && (this.changes != 0)) {
+            res.status(200).json({ message: "Successfully updated token amount."});
+          }
+          else {
+            res.status(500).json({error: "Error updating token amount.", detail: e}).end();
+          }
+        }
+      );
+    }
+    else {
+      res.status(500).json({ "error": "Token value must be positive."}).end();
+    }
+
+  },
+
   /*
+  TODO:
+  addTokens: function(req, res) {
 
-  // Update a role in the database
-  router.put('/:id', function(req, res) {
-    db.run("UPDATE Roles SET Name = ? WHERE Id = ?", [req.body.name, req.params.id],
-      function(e, r) {
-        if ((e == null) && (this.changes != 0)) {
-          res.status(200).json({
-            Id: Number(req.params.id),
-            Name: req.body.name
-          });
-        }
-        else {
-          res.status(500).json({ error: "Error updating role." }).end();
-        }
-      }
-    )
-  });
+  },
 
+  removeTokens: function(req, res) {
+
+  },
+
+  updatePassword: function(req, res) {
+
+  },
+
+  updateUserInfo: function(req, res) {
+
+  },
   */
+
   // Delete a role in the database
   delete: function(req, res) {
     db.run("DELETE FROM Users WHERE Id=?", req.params.id,
@@ -129,7 +161,7 @@ var users = {
           });
         }
         else {
-          res.status(500).json({ error: "Error updating role." }).end();
+          res.status(500).json({ error: "Error deleting user.", detail: e }).end();
         }
       });
   }

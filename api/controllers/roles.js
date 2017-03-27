@@ -7,10 +7,15 @@ var roles = {
     // Do the sql magic here... :)
     db.all("SELECT * FROM Roles",
       function(e, r) {
-        if((r.length != 0) && (e == null))
+        if((r.length != 0) && (e == null)) {
           res.status(200).json(r);
-        else
-          res.status(500).json({ error: "Error retrieving roles." }).end();
+        }
+        else if (r.length == 0) {
+          res.status(500).json({ error: "Error retrieving roles.", detail: "No roles in the database." }).end();
+        }
+        else {
+          res.status(500).json({ error: "Error retrieving roles.", detail: e }).end();
+        }
       });
   },
 
@@ -21,8 +26,11 @@ var roles = {
         if( (e == null) && (r.length != 0) ) {
           res.status(200).json(r);
         }
+        else if (r.length == 0) {
+          res.status(500).json({ error: "Error retrieving role.", detail: "No role with this id." }).end();
+        }
         else {
-          res.status(500).json({ error: "Error retrieving role." }).end();
+          res.status(500).json({ error: "Error retrieving role.", detail: e }).end();
         }
       }
     )
@@ -39,7 +47,7 @@ var roles = {
           });
         }
         else {
-          res.status(500).json({ error: "Error creating role." }).end();
+          res.status(500).json({ error: "Error creating role.", detail: e }).end();
         }
       });
   },
@@ -55,7 +63,7 @@ var roles = {
           });
         }
         else {
-          res.status(500).json({ error: "Error updating role." }).end();
+          res.status(500).json({ error: "Error updating role.", detail: e }).end();
         }
       }
     )
@@ -71,7 +79,7 @@ var roles = {
           });
         }
         else {
-          res.status(500).json({ error: "Error updating role." }).end();
+          res.status(500).json({ error: "Error deleting role.", detail: e }).end();
         }
       });
   }

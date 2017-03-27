@@ -15,7 +15,12 @@ router.delete('/roles/:id', roles.delete);
 router.get('/users', users.getAll);
 router.get('/users/:id', users.getOne);
 router.post('/users', users.create);
-router.post('/users/:id', users.updateUserRole);
+router.post('/users/:id/role', users.updateUserRole);
+router.post('/users/:id/tokens', users.updateTokens);
+//router.post('/users/:id/add', users.addTokens);
+//router.post('/users/:id/remove', users.removeTokens);
+//router.post('/users/:id/update-password', users.updatePassword);
+//router.post('/users/:id/update-info', users.updateUserInfo);
 router.delete('/users/:id', users.delete);
 
 module.exports = router;
