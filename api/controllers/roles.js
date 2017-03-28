@@ -5,8 +5,8 @@ var roles = {
   // Retrieve the list of roles
    getAll: function(req, res) {
 
-     var pageSize = 5;
-     var pageNumber = 0;
+    var pageSize = 5;
+    var pageNumber = 0;
     if(req.query.pageSize != null) {
       pageSize = req.query.pageSize;
     }
@@ -15,6 +15,7 @@ var roles = {
     }
     db.all("SELECT * FROM Roles LIMIT ? OFFSET ?", [pageSize, pageNumber],
       function(e, r) {
+        console.log(r);
         if((r.length != 0) && (e == null)) {
           res.status(200).json({
             pageSize: pageSize,
@@ -22,6 +23,7 @@ var roles = {
             roles: r
           });
         }
+
         else if (r.length == 0) {
           res.status(500).json({ error: "Error retrieving roles.", detail: "No roles in the database." }).end();
         }
@@ -36,8 +38,10 @@ var roles = {
 
     db.all("SELECT * FROM Roles WHERE Id = ?", [req.params.id],
       function(e, r) {
-        if( (e == null) && (r.length != 0) ) {
-          res.status(200).json(r);
+        if(r != undefined) {
+          if( (e == null) && (r.length != 0) ) {
+            res.status(200).json(r);
+          }
         }
         else if (r.length == 0) {
           res.status(500).json({ error: "Error retrieving role.", detail: "No role with this id." }).end();
@@ -53,7 +57,7 @@ var roles = {
   create: function(req, res) {
       db.run("INSERT INTO Roles (Name) VALUES (?)", [req.body.name],
       function(e, r) {
-        if (e == null) {
+        if ((e == null) && (this.changes != 0)) {
           res.status(200).json({
             Id: Number(this.lastID),
             Name: req.body.name
@@ -70,10 +74,7 @@ var roles = {
     db.run("UPDATE Roles SET Name = ? WHERE Id = ?", [req.body.name, req.params.id],
       function(e, r) {
         if ((e == null) && (this.changes != 0)) {
-          res.status(200).json({
-            Id: Number(req.params.id),
-            Name: req.body.name
-          });
+          res.status(200).json({ message: "Successfully updated role" });
         }
         else {
           res.status(500).json({ error: "Error updating role.", detail: e }).end();

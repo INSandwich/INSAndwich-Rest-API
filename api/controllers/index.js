@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-var roles = require('./roles.js');
-var users = require('./users.js');
+var roles = require('./roles');
+var users = require('./users');
+var categories = require('./categories')
 
 // Roles Controller
 router.get('/roles', roles.getAll);
@@ -22,5 +23,12 @@ router.post('/users/:id/tokens', users.updateTokens);
 //router.post('/users/:id/update-passw*', users.updatePassword);
 //router.post('/users/:id/update-info', users.updateUserInfo);
 router.delete('/users/:id', users.delete);
+
+// Category Controller
+router.get('/categories', categories.getAll);
+router.get('/categories/:id', categories.getOne);
+router.post('/categories', categories.create);
+router.put('/categories/:id', categories.update);
+router.delete('/categories/:id', categories.delete);
 
 module.exports = router;

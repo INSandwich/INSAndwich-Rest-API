@@ -82,7 +82,7 @@ var users = {
             db.run("INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse) VALUES (?, ?, ?, ?, ?, ?)",
             [req.body.firstname, req.body.lastname, email, req.body.login, hashedAndSaltedPwd, req.body.adresse],
             function(e, r) {
-              if (e == null) {
+              if((e == null) && (this.changes != 0)) {
                 res.status(200).json({
                   Id: Number(this.lastID),
                   FirstName: req.body.firstname,
