@@ -18,10 +18,8 @@ Please remove the node_modules folder before pushing to github!
 Todo:
   - Finish the user controller (Hashing is done, I guess)
   - Integrate tokens to the api using the users table and some roles
-  - Better SQL Integration (have the database automatically generated if !exists)
   - Add all the controllers and test them
   - Handle errors for each route!!
-  - Make a paging for each list of elements retrieved using the SQL capabilities of selecting a certain amount of elements
   - Add a gulpfile to help cleaning the repo before pushing (aka removing node modules)
   - User Controller (Use promises!!):
     - addToken method with a certain amount of tokens in the JSON sent via post

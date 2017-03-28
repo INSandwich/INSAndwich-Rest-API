@@ -18,10 +18,22 @@ bcrypt.compare(plaintextPwd, hash, function(err, res) {
 var users = {
   // Retrieve the list of users
   getAll: function(req, res) {
-    db.all("SELECT * FROM Users",
+    var pageSize = 5;
+    var pageNumber = 0;
+    if(req.query.pageSize != null) {
+      pageSize = req.query.pageSize;
+    }
+    if(req.query.pageNumber != null) {
+      pageNumber = req.query.pageNumber;
+    }
+    db.all("SELECT * FROM Users LIMIT ? OFFSET ?", [pageSize, pageNumber],
       function(e, r) {
         if((r.length != 0) && (e == null)) {
-          res.status(200).json(r);
+          res.status(200).json({
+            pageSize: pageSize,
+            pageNumber: pageNumber,
+            users: r
+          });
         }
         else if (r.length == 0) {
           res.status(500).json({ error: "Error retrieving users.", detail: "No users in the database." }).end();

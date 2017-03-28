@@ -4,11 +4,23 @@ var db = new sqlite3.Database('insandwich.db');
 var roles = {
   // Retrieve the list of roles
    getAll: function(req, res) {
-    // Do the sql magic here... :)
-    db.all("SELECT * FROM Roles",
+
+     var pageSize = 5;
+     var pageNumber = 0;
+    if(req.query.pageSize != null) {
+      pageSize = req.query.pageSize;
+    }
+    if(req.query.pageNumber != null) {
+      pageNumber = req.query.pageNumber;
+    }
+    db.all("SELECT * FROM Roles LIMIT ? OFFSET ?", [pageSize, pageNumber],
       function(e, r) {
         if((r.length != 0) && (e == null)) {
-          res.status(200).json(r);
+          res.status(200).json({
+            pageSize: pageSize,
+            pageNumber: pageNumber,
+            roles: r
+          });
         }
         else if (r.length == 0) {
           res.status(500).json({ error: "Error retrieving roles.", detail: "No roles in the database." }).end();
@@ -21,7 +33,8 @@ var roles = {
 
   // Retrieve a role by its ID
   getOne: function(req, res) {
-    db.all("SELECT * FROM Roles WHERE Id = ?", req.params.id,
+
+    db.all("SELECT * FROM Roles WHERE Id = ?", [req.params.id],
       function(e, r) {
         if( (e == null) && (r.length != 0) ) {
           res.status(200).json(r);
