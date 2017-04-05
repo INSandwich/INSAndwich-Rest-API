@@ -28,6 +28,24 @@ CREATE TABLE IF NOT EXISTS Users(
   CONSTRAINT fk_role_id FOREIGN KEY (Role_Id) REFERENCES Roles(Id)
 );
 
+INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens)
+  VALUES ("Lorem", "ipsum", "Lorem.ipsum@dolor", "li", "dolor", "rue sit", 5);
+
+INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens)
+  VALUES ("Lorem", "ipsum", "Lorem.ipsum@dolor", "li2", "dolor", "rue sit", 2);
+
+INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens)
+  VALUES ("Lorem", "ipsum", "Lorem.ipsum@dolor", "li3", "dolor", "rue sit", 1);
+
+INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens)
+  VALUES ("Lorem", "ipsum", "Lorem.ipsum@dolor", "li4", "dolor", "rue sit", 822);
+
+INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens)
+  VALUES ("Lorem", "ipsum", "Lorem.ipsum@dolor", "li5", "dolor", "rue sit", 12);
+
+INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens)
+  VALUES ("Lorem", "ipsum", "Lorem.ipsum@dolor", "li6", "dolor", "rue sit", 42);
+
 CREATE TABLE IF NOT EXISTS Products(
   Id INTEGER PRIMARY KEY AUTOINCREMENT,
   Name CHAR(80) NOT NULL,
