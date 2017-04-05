@@ -32,12 +32,11 @@ router.put('/categories/:id', categories.update);
 router.delete('/categories/:id', categories.delete);
 
 //Products Controller
-router.get('/products', products.getAll);
-router.get('/products/:id', products.getOne);
-router.get('/products/:category', products.getCategory);
-router.post('products', products.create);
+router.get('/products', products.getAll);                 // Anton
+router.get('/products/:id', products.getOne);             // Anton
+router.get('/products/:category', products.getCategory);  // Anton
+router.post('products', products.create);                 
 router.post('/products/:id/update-info', products.updateProductInfo);
 router.delete('/products/:id', products.delete);
-
 
 module.exports = router;
