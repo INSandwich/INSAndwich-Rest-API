@@ -158,7 +158,7 @@ var users = {
         if( (e == null) && (r.length != 0) ) {
 
           //Checking if older password is okay
-          console.log(r[0].Password, password);
+          //console.log(r[0].Password, password);
           if(password == r[0].Password && newPassword != 0){
             //Updating to the new password
             db.run("UPDATE Users SET Password = ? WHERE Id = ?", [req.body.newpassword, req.params.id],
@@ -189,6 +189,42 @@ var users = {
   },
 
   updateUserInfo: function(req, res) {
+
+    var email = req.body.email;
+    var FirstName = req.body.firstname;
+    var LastName = req.body.lastname;
+    var Login = req.body.login;
+    var Adresse = req.body.adresse;
+    console.log(email, FirstName, LastName, Login, Adresse)
+
+    //We check the mail
+    if(!(IsEmail.validate(email))) {
+      res.status(500).json({error: "Please provide a correct email."}).end();
+
+    //We check that every field is filled
+  }else if(FirstName != ""  && LastName != "" && Login != "" && Adresse != ""){
+
+      db.run("UPDATE Users SET FirstName = ?, LastName = ?, Email = ? , Login = ?, Adresse = ? WHERE Id = ?",
+      [req.body.firstname, req.body.lastname, email, req.body.login, req.body.adresse, req.params.id],
+      function(e, r) {
+        if((e == null) && (this.changes != 0)) {
+          res.status(200).json({
+            Id: req.params.id,
+            FirstName: req.body.firstname,
+            LastName: req.body.lastname,
+            Email: email,
+            Login: req.body.login,
+            Adresse: req.body.adresse
+          });
+        }
+        else {
+          res.status(500).json({ error: "Error updating user.", detail: e }).end();
+        }
+      });
+    }else{
+      res.status(500).json({error: "Please fill every field."});
+    }
+
 
   },
 
