@@ -18,7 +18,5 @@ Todo:
   - Add all the controllers and test them
   - Handle errors for each route!!
   - User Controller (Use promises!!):
-    - addToken method with a certain amount of tokens in the JSON sent via post
-    - removeToken method, checking if possible, otherwise sending error
     - updateUserInfo method, to update FirstName, LastName, email...
     - updatePassword, use the bcrypt library methods with promises to get the hash from the db
