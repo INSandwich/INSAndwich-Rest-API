@@ -16,7 +16,7 @@ $ npm run start
 Todo:
   - Integrate tokens to the api using the users table and some roles
   - Add all the controllers and test them
-  - Handle errors for each route!!
+  - Handle errors for each route!
   - User Controller (Use promises!!):
     - updateUserInfo method, to update FirstName, LastName, email...
     - updatePassword, use the bcrypt library methods with promises to get the hash from the db
