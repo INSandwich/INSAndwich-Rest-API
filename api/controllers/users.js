@@ -63,16 +63,11 @@ var users = {
 
   // Insert an user into the database
   create: function(req, res) {
-      // Gotta hash and salt this pwd
-      var hashedAndSaltedPwd = null;
       var password = req.body.password;
 
       // Gosh pls no, we gotta use promises here, to first execute everything in here, THEN the db.run
       if(password != "") {
         //console.log(password);
-        bcrypt.hash(password, 10).then(function(hash) {
-            hashedAndSaltedPwd = hash;
-            //console.log(hashedAndSaltedPwd);
 
             var email = req.body.email;
             if(!(IsEmail.validate(email))) {
@@ -80,7 +75,7 @@ var users = {
             }
 
             db.run("INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse) VALUES (?, ?, ?, ?, ?, ?)",
-            [req.body.firstname, req.body.lastname, email, req.body.login, hashedAndSaltedPwd, req.body.adresse],
+            [req.body.firstname, req.body.lastname, email, req.body.login, req.body.password, req.body.adresse],
             function(e, r) {
               if((e == null) && (this.changes != 0)) {
                 res.status(200).json({
@@ -89,14 +84,13 @@ var users = {
                   LastName: req.body.lastname,
                   Email: email,
                   Login: req.body.login,
-                  Pwd: hashedAndSaltedPwd,
+                  Pwd: req.body.password,
                   Adresse: req.body.adresse
                 });
               }
               else {
                 res.status(500).json({ error: "Error creating user.", detail: e }).end();
               }
-            });
         });
         //res.status(500).json({error: "Hash failed, please provide a password."}).end();
       }
@@ -190,6 +184,43 @@ var users = {
   },
 
   updatePassword: function(req, res) {
+    //Password verification before changing it
+    var password = req.body.password;
+    var newPassword = req.body.newpassword;
+
+    //Get older password
+    db.all("SELECT Password FROM Users WHERE Id = ?", req.params.id,
+      function(e, r) {
+        if( (e == null) && (r.length != 0) ) {
+
+          //Checking if older password is okay
+          console.log(r[0].Password, password);
+          if(password == r[0].Password && newPassword != 0){
+            //Updating to the new password
+            db.run("UPDATE Users SET Password = ? WHERE Id = ?", [req.body.newpassword, req.params.id],
+              function(e, r) {
+                //console.log(this);
+                if((e == null) && (this.changes != 0)) {
+                  res.status(200).json({ message: "Successfully updated user password" });
+                }
+                else {
+                  res.status(500).json({error: "Error updating user password.", detail: e}).end();
+                }
+              }
+            );
+          }else{
+            res.status(500).json({error: "Error updating user password : please enter your valid password."});
+          }
+        }
+        else if (r.length == 0) {
+          res.status(500).json({ error: "Error retrieving old password.", detail: "No user with this Id." }).end();
+        }
+        else {
+          res.status(500).json({ error: "Error retrieving old password.", detail: e }).end();
+        }
+      }
+    )
+
 
   },
 
