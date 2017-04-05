@@ -144,8 +144,7 @@ var users = {
 
   },
 
-  /*
-  TODO:
+
   addTokens: function(req, res) {
 
   },
@@ -161,7 +160,7 @@ var users = {
   updateUserInfo: function(req, res) {
 
   },
-  */
+
 
   // Delete a role in the database
   delete: function(req, res) {
