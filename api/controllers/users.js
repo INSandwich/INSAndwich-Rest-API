@@ -268,8 +268,7 @@ var users = {
 
 
   },
-
-
+  
   // Delete a role in the database
   delete: function(req, res) {
     db.run("DELETE FROM Users WHERE Id=?", req.params.id,
