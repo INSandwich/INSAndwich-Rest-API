@@ -21,7 +21,6 @@ router.post('/users/:id/tokens', users.updateTokens);
 router.post('/users/:id/add', users.addTokens);
 router.post('/users/:id/remove', users.removeTokens);
 router.post('/users/:id/update-passw', users.updatePassword);
-
 router.post('/users/:id/update-info', users.updateUserInfo);
 router.delete('/users/:id', users.delete);
 
@@ -31,5 +30,14 @@ router.get('/categories/:id', categories.getOne);
 router.post('/categories', categories.create);
 router.put('/categories/:id', categories.update);
 router.delete('/categories/:id', categories.delete);
+
+//Products Controller
+router.get('/products', products.getAll);
+router.get('/products/:id', products.getOne);
+router.get('/products/:category', products.getCategory);
+router.post('products', products.create);
+router.post('/products/:id/update-info', products.updateProductInfo);
+router.delete('/products/:id', products.delete);
+
 
 module.exports = router;
