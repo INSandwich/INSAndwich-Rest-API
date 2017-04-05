@@ -158,7 +158,8 @@ var users = {
         if( (e == null) && (r.length != 0) ) {
 
           //Checking if older password is okay
-          if(password == r && newPassword != 0){
+          console.log(r[0].Password, password);
+          if(password == r[0].Password && newPassword != 0){
             //Updating to the new password
             db.run("UPDATE Users SET Password = ? WHERE Id = ?", [req.body.newpassword, req.params.id],
               function(e, r) {
@@ -171,8 +172,9 @@ var users = {
                 }
               }
             );
+          }else{
+            res.status(500).json({error: "Error updating user password : please enter your valid password."});
           }
-          res.status(500).json({error: "Error updating user password : please enter your valid password."});
         }
         else if (r.length == 0) {
           res.status(500).json({ error: "Error retrieving old password.", detail: "No user with this Id." }).end();
