@@ -167,14 +167,19 @@ var users = {
       function(e, r){
         if(e == null && r.length != 0)
         {
-          db.run("UPDATE Users SET Tokens = ? WHERE id = ?",
-                  [r[0].Tokens - req.body.tokens, req.params.id],
-                  function(error, result){
-                    if(error == null)
-                      res.status(200).json({message: "Successfully removed tokens"});
-                    else
-                      res.status(500).json({message : "Error removing token to user : update error"})
-                  })
+          if(r[0].Tokens >= req.body.tokens)
+          {
+            db.run("UPDATE Users SET Tokens = ? WHERE id = ?",
+            [r[0].Tokens - req.body.tokens, req.params.id],
+            function(error, result){
+              if(error == null)
+              res.status(200).json({message: "Successfully removed tokens"});
+              else
+              res.status(500).json({message : "Error removing token to user : update error"});
+            })
+          } else {
+            res.status(500).json({message : "Error : insufficient tokens"});
+          }
 
         } else {
           res.status(500).json({message: "Error removing token to user : read error"});
