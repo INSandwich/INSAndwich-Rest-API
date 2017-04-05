@@ -123,7 +123,6 @@ var users = {
 
   // Update the token value
   updateTokens: function(req, res) {
-
     var tokens = req.body.tokens;
 
     if(tokens > 0) {
@@ -144,13 +143,50 @@ var users = {
 
   },
 
-
   addTokens: function(req, res) {
+    var tokens = req.body.tokens;
 
+    db.all("SELECT Tokens FROM Users WHERE id = ?", [req.params.id],
+      function(e, r){
+        if(e == null && r.length != 0)
+        {
+          db.run("UPDATE Users SET Tokens = ? WHERE id = ?",
+          [req.body.tokens + r[0].Tokens, req.params.id],
+          function(error, result){
+            if(error == null)
+            res.status(200).json({message: "Successfully added tokens"});
+            else
+            res.status(500).json({message : "Error adding token to user : update error"})
+          })
+
+        } else {
+          res.status(500).json({message: "Error adding token to user : read error"});
+        }
+      }
+    )
   },
 
   removeTokens: function(req, res) {
+    var tokens = req.body.tokens;
 
+    db.all("SELECT Tokens FROM Users WHERE id = ?", [req.params.id],
+      function(e, r){
+        if(e == null && r.length != 0)
+        {
+          db.run("UPDATE Users SET Tokens = ? WHERE id = ?",
+                  [r[0].Tokens - req.body.tokens, req.params.id],
+                  function(error, result){
+                    if(error == null)
+                      res.status(200).json({message: "Successfully removed tokens"});
+                    else
+                      res.status(500).json({message : "Error removing token to user : update error"})
+                  })
+
+        } else {
+          res.status(500).json({message: "Error removing token to user : read error"});
+        }
+      }
+    )
   },
 
   updatePassword: function(req, res) {
