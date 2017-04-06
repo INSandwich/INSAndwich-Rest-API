@@ -34,8 +34,8 @@ router.delete('/categories/:id', categories.delete);
 //Products Controller
 router.get('/products', products.getAll);                 // Anton
 router.get('/products/:id', products.getOne);             // Anton
-router.get('/products/:category', products.getCategory);  // Anton
-router.post('products', products.create);                 
+router.get('/products/:categoryId', products.getCategory);  // Anton
+router.post('products', products.create);
 router.post('/products/:id/update-info', products.updateProductInfo);
 router.delete('/products/:id', products.delete);
 
