@@ -3,7 +3,8 @@ var router = express.Router();
 
 var roles = require('./roles');
 var users = require('./users');
-var categories = require('./categories')
+var categories = require('./categories');
+var products = require('./products');
 
 // Roles Controller
 router.get('/roles', roles.getAll);
@@ -32,11 +33,11 @@ router.put('/categories/:id', categories.update);
 router.delete('/categories/:id', categories.delete);
 
 //Products Controller
-router.get('/products', products.getAll);                 // Anton
-router.get('/products/:id', products.getOne);             // Anton
+/*router.get('/products', products.getAll);                 // Anton
+router.get('/products/:id', products.getOne);             // Anton*/
 router.get('/products/:categoryId', products.getCategory);  // Anton
-router.post('products', products.create);
+/*router.post('products', products.create);
 router.post('/products/:id/update-info', products.updateProductInfo);
-router.delete('/products/:id', products.delete);
+router.delete('/products/:id', products.delete);*/
 
 module.exports = router;

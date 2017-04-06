@@ -20,3 +20,4 @@ Todo:
   - User Controller (Use promises!!):
     - updateUserInfo method, to update FirstName, LastName, email...
     - updatePassword, use the bcrypt library methods with promises to get the hash from the db
+  - add `res.setHeader('Access-Control-Allow-Origin','*')` to all responses (necessary for front end treatment) 

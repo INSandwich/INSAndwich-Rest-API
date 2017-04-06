@@ -32,7 +32,7 @@ var users = {
           res.status(200).json({
             pageSize: pageSize,
             pageNumber: pageNumber,
-            users: r
+            items: r
           });
         }
         else if (r.length == 0) {
@@ -268,7 +268,7 @@ var users = {
 
 
   },
-  
+
   // Delete a role in the database
   delete: function(req, res) {
     db.run("DELETE FROM Users WHERE Id=?", req.params.id,

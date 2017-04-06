@@ -20,7 +20,7 @@ var categories = {
           res.status(200).json({
             pageSize: pageSize,
             pageNumber: pageNumber,
-            categories: r
+            items: r
           });
       }
       else if (r.length == 0) {
