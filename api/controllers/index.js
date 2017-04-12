@@ -39,7 +39,7 @@ router.get('/products', products.getAll);
 router.get('/products/:id', products.getOne);
 router.get('/products/category/:categoryId', products.getCategory);
 router.post('/products', products.create);
-router.post('/products/:id/update-info', products.updateProductInfo);
+router.put('/products/:id', products.update);
 router.delete('/products/:id', products.delete);
 
 module.exports = router;
