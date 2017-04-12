@@ -100,6 +100,25 @@ token();
     )
   },
 
+  // Retrieve an user by its login
+  getLogin: function(req, res) {
+
+
+    db.all("SELECT * FROM Users WHERE Login LIKE ?", req.params.Login,
+      function(e, r) {
+        if( (e == null) && (r.length != 0) ) {
+          res.status(200).json(r);
+        }
+        else if (r.length == 0) {
+          res.status(500).json({ error: "Error retrieving user.", detail: "No user with this login."}).end();
+        }
+        else {
+          res.status(500).json({ error: "Error retrieving user.", detail: e }).end();
+        }
+      }
+    )
+  },
+
   // Insert an user into the database
   create: function(req, res) {
       var password = req.body.password;

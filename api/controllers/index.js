@@ -16,6 +16,7 @@ router.delete('/roles/:id', roles.delete);
 // Users Controller
 router.get('/users', users.getAll);
 router.get('/users/:id', users.getOne);
+router.get('/users/login/:Login', users.getLogin);
 router.post('/users', users.create);
 router.post('/users/:id/role', users.updateUserRole);
 router.post('/users/:id/tokens', users.updateTokens);
