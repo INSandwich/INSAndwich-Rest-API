@@ -106,12 +106,36 @@ var products = {
     }
   },
 
-  updateProductInfo: function(req, res) {
-
+  update: function(req, res) {
+    console.log(req.body);
+    console.log(req.params.id);
+    // expect full data to update and dumps updates missing any data
+    db.run("UPDATE Products SET Name = ?, Description = ?,  Available = ?, Image = ?, Price = ?, Category_Id = ? WHERE Id = ?",
+    [req.body.name, req.body.description, req.body.available, req.body.image, req.body.price, req.body.category, req.params.id],
+    function(e, r){
+      console.log("error status = ", e);
+      if ((e == null) && (this.changes != 0)) {
+        res.status(200).json({ message: "Successfully updated product info" });
+      }
+      else {
+        res.status(500).json({ error: "Error updating product.", detail: e }).end();
+      }
+    }
+    )
   },
 
   delete: function(req, res) {
-
+    db.run("DELETE FROM Products WHERE Id=?", req.params.id,
+      function(e, r) {
+        if ((e == null) && (this.changes != 0)) {
+          res.status(200).json({
+            message: "Product deleted successfully."
+          });
+        }
+        else {
+          res.status(500).json({ error: "Error deleting product.", detail: e }).end();
+        }
+      });
   },
 }
 module.exports = products;
