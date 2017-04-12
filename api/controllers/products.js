@@ -74,7 +74,8 @@ var products = {
   },
 
   create: function(req, res) {
-
+    // check for product insertion validity
+    if(req.body.name == null || req.body.image == null || req.body)
   },
 
   updateProductInfo: function(req, res) {
@@ -84,9 +85,5 @@ var products = {
   delete: function(req, res) {
 
   },
-
-
-
-
 }
 module.exports = products;
