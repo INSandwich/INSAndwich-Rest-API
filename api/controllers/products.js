@@ -74,8 +74,36 @@ var products = {
   },
 
   create: function(req, res) {
-    // check for product insertion validity
-    if(req.body.name == null || req.body.image == null || req.body)
+    // default values for non-critical data
+    description = "No description available";
+    available = 0;  // not available by default, might need later change
+
+    if(req.body.name == null || req.body.image == null || req.body.price == null || req.body.category == null)
+    {
+      res.status(500).json({error : "Missing critical data"});
+    } else {
+      // init default values for non critical data if not submitted
+      if(req.body.description != null)
+        description = req.body.description;
+      if(req.body.available != null)
+        available = req.body.available;
+
+
+      db.run("INSERT into Products (Name, Description, Available, Image, Price, Category_Id) VALUES (?,?,?,?,?,?)",
+      [req.body.name, description, available, req.body.image, req.body.price, req.body.category],
+      function(e, r){
+        if(e == null && this.changes != 0){
+          res.setHeader('Access-Control-Allow-Origin','*');
+          res.status(200).json({
+            Id : Number(this.lastID),
+            Name : req.body.name
+          });
+        } else {
+          res.status(500).json({error : "Could not add product in database"}).end();
+        }
+      }
+      );
+    }
   },
 
   updateProductInfo: function(req, res) {
