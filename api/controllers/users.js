@@ -50,7 +50,6 @@ var users = {
   //router.post('/auth', users.auth);
   auth: function(req, res) {
 
-
     var rand = function() {
         return Math.random().toString(36).substr(2); // remove `0.`
     };
@@ -61,7 +60,8 @@ var users = {
 
     var tokstring = token();
 
-token();
+    token();
+
     var password = req.body.password;
     var login = req.body.login;
 
@@ -69,15 +69,18 @@ token();
       function(e, r) {
         if( (e == null) && (r.length != 0) ) {
           if(password == r[0].Password){
-              res.setHeader('Access-Control-Allow-Origin','*');
+              //res.setHeader('Access-Control-Allow-Origin','*');
               res.status(200).json({ Message: "Successfully logged in", Token : tokstring, Login : login, Role_Id : r[0].Role_Id });
           }
           else if (r.length == 0) {
+              //res.setHeader('Access-Control-Allow-Origin','*');
               res.status(500).json({ error: "Error retrieving user.", detail: "No user with this login." }).end();
           }
 
        }
        else {
+         //res.setHeader('Access-Control-Allow-Origin','*');
+
          res.status(500).json({ error: "Error : blank request.", detail: e }).end();
        }
 

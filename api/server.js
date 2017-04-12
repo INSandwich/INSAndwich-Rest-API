@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 
 var app = express();
 
@@ -17,8 +18,10 @@ app.get('/', function(req, res) {
   console.log("Client connected");
 });
 
-app.use(controllers);
 
+app.use(cors({origin: '*'}));
+
+app.use(controllers);
 
 app.listen(port);
 console.log("Visit http://localhost:"+port);

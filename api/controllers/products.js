@@ -11,10 +11,10 @@ var products = {
     if(req.query.pageNumber != null)
       pageNumber = req.query.pageNumber;
 
+    //res.setHeader('Access-Control-Allow-Origin','*');
     db.all("SELECT * from Products LIMIT ? OFFSET ?", [pageSize, pageNumber],
     function(e, r) {
       if((r.length != 0) && (e == null)) {
-        res.setHeader('Access-Control-Allow-Origin','*');
         res.status(200).json({
           pageSize: pageSize,
           pageNumber: pageNumber,
