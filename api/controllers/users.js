@@ -15,6 +15,9 @@ bcrypt.compare(plaintextPwd, hash, function(err, res) {
 );
 */
 
+
+
+
 var users = {
   // Retrieve the list of users
   getAll: function(req, res) {
@@ -44,6 +47,42 @@ var users = {
       });
   },
 
+  //router.post('/auth', users.auth);
+  auth: function(req, res) {
+
+
+    var rand = function() {
+        return Math.random().toString(36).substr(2); // remove `0.`
+    };
+
+    var token = function() {
+        return rand() + rand(); // to make it longer
+    };
+
+    var tokstring = token();
+
+token();
+    var password = req.body.password;
+    var login = req.body.login;
+
+    db.all("SELECT Password, Role_Id FROM Users WHERE Login LIKE ?", req.body.login,
+      function(e, r) {
+        if( (e == null) && (r.length != 0) ) {
+          if(password == r[0].Password){
+              res.status(200).json({ Message: "Successfully logged in", Token : tokstring, Login : login, Role_Id : r[0].Role_Id });
+          }
+          else if (r.length == 0) {
+              res.status(500).json({ error: "Error retrieving user.", detail: "No user with this login." }).end();
+          }
+
+       }
+       else {
+         res.status(500).json({ error: "Error : blank request.", detail: e }).end();
+       }
+
+    });
+  },
+
   // Retrieve an user by its ID
   getOne: function(req, res) {
     db.all("SELECT * FROM Users WHERE Id = ?", req.params.id,
@@ -53,6 +92,25 @@ var users = {
         }
         else if (r.length == 0) {
           res.status(500).json({ error: "Error retrieving user.", detail: "No user with this Id." }).end();
+        }
+        else {
+          res.status(500).json({ error: "Error retrieving user.", detail: e }).end();
+        }
+      }
+    )
+  },
+
+  // Retrieve an user by its login
+  getLogin: function(req, res) {
+
+
+    db.all("SELECT * FROM Users WHERE Login LIKE ?", req.params.Login,
+      function(e, r) {
+        if( (e == null) && (r.length != 0) ) {
+          res.status(200).json(r);
+        }
+        else if (r.length == 0) {
+          res.status(500).json({ error: "Error retrieving user.", detail: "No user with this login."}).end();
         }
         else {
           res.status(500).json({ error: "Error retrieving user.", detail: e }).end();

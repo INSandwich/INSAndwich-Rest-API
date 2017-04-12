@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS Users(
 );
 
 INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens)
-  VALUES ("Lorem", "ipsum", "Lorem.ipsum@dolor", "li", "dolor", "rue sit", 5);
+  VALUES ("Admin", "istrateur", "admin@admin", "admin", "f71dbe52628a3f83a77ab494817525c6", "pwal", 9001);
 
 INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens)
   VALUES ("Lorem", "ipsum", "Lorem.ipsum@dolor", "li2", "dolor", "rue sit", 2);
@@ -62,7 +62,20 @@ CREATE TABLE IF NOT EXISTS Products(
 );
 
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Kebab", "Le classique kebab, toujours la star des sandwicheries. Laissez vous tenter par cette douceur turque.", 1, "http://www.goldenmoustache.com/wp-content/uploads/2016/05/2b5747be-847b-42d4-a9d0-cd919b159c9e_maxi-kebab-vip-mag-171-1.jpg", 2.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Galette Saucisse", "La Bretagne au rendez vous, quoi de mieux qu'une bonne saucisse enroulée dans sa galette pour se remémorer son beau pays?", 1, "http://tyvince.fr/wp-content/uploads/2015/02/galette-saucisse.png", 2.5, 1);
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Tacos", "Parlons peu, parlons bien, quel est le sandwich préféré des étudiants ? Bien evidemment le tacos ! Goutez à ce concentré d'énergie !", 1, "http://mustikebab.com/wp-content/uploads/2016/02/Tacos-poulet-musti-kebab.jpg", 3.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Triade de Triangles", "Le connu et reconnu triangle, repas des guerriers et des routiers.", 1, "http://weknowyourdreams.com/images/sandwich/sandwich-02.jpg", 1.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Bagel Carnivore", "Du bacon, du jambon de pays, du jambon cuit.", 1, "http://bigapplebagels.com/media/1032/menu-intro_deli-sandwich.png", 1.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Suedois", "Brrrrr, le grand froid, le saumon, les jolies blondes... Bref la suède quoi ! Et quoi de meilleur que leur sandwich suedois ?", 1, "http://www.patisseriepalanque.com/WebRoot/LaPoste2/Shops/box16474/4F29/9530/6F19/F58C/B967/0A0C/05EA/74B3/Isandwich_suedois_saumon.jpg", 2, 1);
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Churros", "Un vrai met de festival, venez apprecier nos churros faits avec amour...", 1, "https://smittenkitchendotcom.files.wordpress.com/2016/03/churros1.jpg", 1, 2);
