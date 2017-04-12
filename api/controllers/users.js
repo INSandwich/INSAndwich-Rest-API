@@ -69,6 +69,7 @@ token();
       function(e, r) {
         if( (e == null) && (r.length != 0) ) {
           if(password == r[0].Password){
+              res.setHeader('Access-Control-Allow-Origin','*');
               res.status(200).json({ Message: "Successfully logged in", Token : tokstring, Login : login, Role_Id : r[0].Role_Id });
           }
           else if (r.length == 0) {
