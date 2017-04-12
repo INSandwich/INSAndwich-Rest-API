@@ -23,6 +23,7 @@ router.post('/users/:id/add', users.addTokens);
 router.post('/users/:id/remove', users.removeTokens);
 router.post('/users/:id/update-passw', users.updatePassword);
 router.post('/users/:id/update-info', users.updateUserInfo);
+router.post('/auth', users.auth);
 router.delete('/users/:id', users.delete);
 
 // Category Controller
