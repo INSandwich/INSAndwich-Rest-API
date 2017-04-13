@@ -44,4 +44,12 @@ router.post('/products', products.create);
 router.put('/products/:id', products.update);
 router.delete('/products/:id', products.delete);
 
+// Orders controller
+router.get('/orders', orders.getAll);
+router.get('/orders/users/:id', orders.getByUser);
+router.get('/orders/:id', orders.getOne);
+router.post('/orders/:id', orders.create);
+router.put('/orders/:id', orders.update);
+router.delete('/orders/:id', orders.delete);
+
 module.exports = router;
