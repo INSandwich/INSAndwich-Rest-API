@@ -1,24 +1,26 @@
 var express = require('express');
 var router = express.Router();
 
-var roles = require('./roles');
+//var roles = require('./roles');
 var users = require('./users');
 var categories = require('./categories');
 var products = require('./products');
 
 // Roles Controller
+/*
 router.get('/roles', roles.getAll);
 router.get('/roles/:id', roles.getOne);
 router.post('/roles', roles.create);
 router.put('/roles/:id', roles.update);
 router.delete('/roles/:id', roles.delete);
+*/
 
 // Users Controller
 router.get('/users', users.getAll);
 router.get('/users/:id', users.getOne);
 router.get('/users/login/:Login', users.getLogin);
 router.post('/users', users.create);
-router.post('/users/:id/role', users.updateUserRole);
+router.post('/users/:id/role', users.updateUserRole); // To modify, roles have been move
 router.post('/users/:id/tokens', users.updateTokens);
 router.post('/users/:id/add', users.addTokens);
 router.post('/users/:id/remove', users.removeTokens);

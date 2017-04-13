@@ -6,15 +6,6 @@ CREATE TABLE IF NOT EXISTS Category(
   Name CHAR(50) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Roles(
-  Id INTEGER PRIMARY KEY AUTOINCREMENT,
-  Name CHAR(50) NOT NULL
-);
-
-INSERT INTO Roles (Name) Values("Guest");
-INSERT INTO Roles (Name) Values("Customer");
-INSERT INTO Roles (Name) Values("Admin");
-
 INSERT INTO Category (Name) Values("Sandwiches");
 INSERT INTO Category (Name) Values("Desserts");
 INSERT INTO Category (Name) Values("Boissons");
@@ -27,28 +18,16 @@ CREATE TABLE IF NOT EXISTS Users(
   Login CHAR(50) UNIQUE NOT NULL,
   Password CHAR(254) NOT NULL,
   Adresse CHAR(300) NOT NULL,
-  Tokens INTEGER default 0,
-  Role_Id INTEGER NOT NULL default 1,
-  CONSTRAINT fk_role_id FOREIGN KEY (Role_Id) REFERENCES Roles(Id)
+  Tokens INTEGER default 10,
+  Role CHAR(50) default 'user'
 );
 
-INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens)
-  VALUES ("Admin", "istrateur", "admin@admin", "admin", "f71dbe52628a3f83a77ab494817525c6", "pwal", 9001);
+INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens, Role)
+  VALUES ("Admin", "istrateur", "admin@admin", "admin", "f71dbe52628a3f83a77ab494817525c6", "pwal", 50000, 'admin');
 
-INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens)
-  VALUES ("Lorem", "ipsum", "Lorem.ipsum@dolor", "li2", "dolor", "rue sit", 2);
+INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse)
+  VALUES ("Alexandre", "Dufeil", "Alexandre.Dufeil@insa-lyon.fr", "noob", "9cb4afde731e9eadcda4506ef7c65fa2", "Rue ;) ;) ");
 
-INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens)
-  VALUES ("Lorem", "ipsum", "Lorem.ipsum@dolor", "li3", "dolor", "rue sit", 1);
-
-INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens)
-  VALUES ("Lorem", "ipsum", "Lorem.ipsum@dolor", "li4", "dolor", "rue sit", 822);
-
-INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens)
-  VALUES ("Lorem", "ipsum", "Lorem.ipsum@dolor", "li5", "dolor", "rue sit", 12);
-
-INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse, Tokens)
-  VALUES ("Lorem", "ipsum", "Lorem.ipsum@dolor", "li6", "dolor", "rue sit", 42);
 
 CREATE TABLE IF NOT EXISTS Products(
   Id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -35,7 +35,7 @@ var products = {
     db.all("select * from Products where Id = ?", req.params.id,
     function(e, r){
       if(r.length != 0 && e == null){
-        res.setHeader('Access-Control-Allow-Origin','*');
+        //res.setHeader('Access-Control-Allow-Origin','*');
         res.status(200).json({item : r})
       } else {
         res.status(500).json({error : "Couldn't get product", detail : e}).end();

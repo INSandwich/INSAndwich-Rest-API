@@ -1,22 +1,6 @@
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('insandwich.db');
-var bcrypt = require('bcrypt');
 var IsEmail = require('isemail');
-
-/* To check a password with bcrypt :
-bcrypt.compare(plaintextPwd, hash, function(err, res) {
-    if(res == true) {
-      console.log(plaintextPwd,"is correct");
-    }
-    else {
-    console.log("wrong pwd");
-    }
-  }
-);
-*/
-
-
-
 
 var users = {
   // Retrieve the list of users
@@ -49,7 +33,7 @@ var users = {
 
   //router.post('/auth', users.auth);
   auth: function(req, res) {
-
+    console.log(req.body);
     var rand = function() {
         return Math.random().toString(36).substr(2); // remove `0.`
     };
@@ -65,18 +49,20 @@ var users = {
     var password = req.body.password;
     var login = req.body.login;
 
-    db.all("SELECT Password, Role_Id FROM Users WHERE Login LIKE ?", req.body.login,
+    db.all("SELECT Password, Role FROM Users WHERE Login LIKE ?", req.body.login,
       function(e, r) {
         if( (e == null) && (r.length != 0) ) {
           if(password == r[0].Password){
               //res.setHeader('Access-Control-Allow-Origin','*');
-              res.status(200).json({ Message: "Successfully logged in", Token : tokstring, Login : login, Role_Id : r[0].Role_Id });
+              res.status(200).json({ message: "Successfully logged in", token : tokstring, login : login, role: r[0].Role });
           }
-          else if (r.length == 0) {
-              //res.setHeader('Access-Control-Allow-Origin','*');
-              res.status(500).json({ error: "Error retrieving user.", detail: "No user with this login." }).end();
+          else {
+            res.status(500).json({ error: "Authentification error", detail: "Login ou mot de passe incorrect."})
           }
-
+       }
+       else if (r.length == 0) {
+         //res.setHeader('Access-Control-Allow-Origin','*');
+         res.status(500).json({ error: "Error retrieving user.", detail: "Login ou mot de passe incorrect." }).end();
        }
        else {
          //res.setHeader('Access-Control-Allow-Origin','*');
