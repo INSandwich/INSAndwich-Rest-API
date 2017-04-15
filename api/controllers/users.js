@@ -245,7 +245,7 @@ var users = {
     db.all("SELECT Password FROM Users WHERE Id = ?", req.params.id,
       function(e, r) {
         if( (e == null) && (r.length != 0) ) {
-
+          console.log(r[0].Password, newPassword);
           //Checking if older password is okay
           //console.log(r[0].Password, password);
           if(password == r[0].Password && newPassword != 0){
@@ -261,8 +261,9 @@ var users = {
                 }
               }
             );
-          }else{
-            res.status(500).json({error: "Error updating user password : please enter your valid password."});
+
+          } else {
+            res.status(500).json({error: "Error updating user password", detail: "Ancien mot de passe non valide."}).end();
           }
         }
         else if (r.length == 0) {
@@ -311,7 +312,7 @@ var users = {
         }
       });
     }else{
-      res.status(500).json({error: "Please fill every field."});
+      res.status(500).json({error: "Error updating user", detail: "Please fill every field."}).end();
     }
 
 
