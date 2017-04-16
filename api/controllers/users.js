@@ -7,13 +7,14 @@ var users = {
   getAll: function(req, res) {
     var pageSize = 5;
     var pageNumber = 0;
+    var login = req.query.login ? req.query.login : "%"; // Lambda expressions are bae
     if(req.query.pageSize != null) {
       pageSize = req.query.pageSize;
     }
     if(req.query.pageNumber != null) {
       pageNumber = req.query.pageNumber;
     }
-    db.all("SELECT * FROM Users LIMIT ? OFFSET ?", [pageSize, pageNumber],
+    db.all("SELECT * FROM Users WHERE Login LIKE ? LIMIT ? OFFSET ?", [login ,pageSize, pageNumber],
       function(e, r) {
         if((r.length != 0) && (e == null)) {
           res.status(200).json({
