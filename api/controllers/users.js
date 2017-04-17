@@ -7,7 +7,7 @@ var users = {
   getAll: function(req, res) {
     var pageSize = 5;
     var pageNumber = 0;
-    var login = req.query.login ? req.query.login+"%" : "%"; // Lambda expressions are bae
+    var login = req.query.login ? "%"+req.query.login+"%" : "%"; // Lambda expressions are bae
     if(req.query.pageSize != null) {
       pageSize = req.query.pageSize;
     }

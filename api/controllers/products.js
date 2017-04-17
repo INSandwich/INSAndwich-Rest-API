@@ -6,13 +6,14 @@ var products = {
   getAll: function(req, res) {
     var pageSize = 9;
     var pageNumber = 0;
+    var name = req.query.name ? "%"+req.query.name+"%" : "%";
     if(req.query.pageSize != null)
       pageSize = req.query.pageSize;
     if(req.query.pageNumber != null)
       pageNumber = req.query.pageNumber;
 
     //res.setHeader('Access-Control-Allow-Origin','*');
-    db.all("SELECT * from Products LIMIT ? OFFSET ?", [pageSize, pageNumber],
+    db.all("SELECT * from Products WHERE Name LIKE ? LIMIT ? OFFSET ?", [name, pageSize, pageNumber],
     function(e, r) {
       if((r.length != 0) && (e == null)) {
         res.status(200).json({
