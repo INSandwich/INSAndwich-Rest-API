@@ -97,7 +97,12 @@ var products = {
           res.setHeader('Access-Control-Allow-Origin','*');
           res.status(200).json({
             Id : Number(this.lastID),
-            Name : req.body.name
+            Name : req.body.name,
+            Description: description,
+            Available: available,
+            Image: req.body.image,
+            Price: req.body.price,
+            Category: req.body.category
           });
         } else {
           res.status(500).json({error : "Could not add product in database"}).end();
