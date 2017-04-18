@@ -151,7 +151,7 @@ var users = {
 
   // Update the user's role
   updateUserRole: function(req, res) {
-    db.run("UPDATE Users SET Role_Id = ? WHERE Id = ?", [req.body.roleid, req.params.id],
+    db.run("UPDATE Users SET Role = ? WHERE Id = ?", [req.body.role, req.params.id],
       function(e, r) {
         //console.log(this);
         if((e == null) && (this.changes != 0)) {

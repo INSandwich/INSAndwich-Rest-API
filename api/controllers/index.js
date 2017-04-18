@@ -20,8 +20,8 @@ router.get('/users', users.getAll);
 router.get('/users/:id', users.getOne);
 router.get('/users/login/:Login', users.getLogin);
 router.post('/users', users.create);
-router.post('/users/:id/role', users.updateUserRole); // To modify, roles have been move
-router.post('/users/:id/tokens', users.updateTokens);
+router.put('/users/:id/role', users.updateUserRole); 
+router.put('/users/:id/tokens', users.updateTokens);
 router.post('/users/:id/add', users.addTokens);
 router.post('/users/:id/remove', users.removeTokens);
 router.post('/users/:id/update-passw', users.updatePassword);
