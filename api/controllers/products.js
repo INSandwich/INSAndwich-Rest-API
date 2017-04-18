@@ -121,7 +121,15 @@ var products = {
     function(e, r){
       console.log("error status = ", e);
       if ((e == null) && (this.changes != 0)) {
-        res.status(200).json({ message: "Successfully updated product info" });
+        res.status(200).json({
+          Id : req.params.id,
+          Name : req.body.name,
+          Description: req.body.description,
+          Available: req.body.available,
+          Image: req.body.image,
+          Price: req.body.price,
+          Category: req.body.category
+        });
       }
       else {
         res.status(500).json({ error: "Error updating product.", detail: e }).end();
