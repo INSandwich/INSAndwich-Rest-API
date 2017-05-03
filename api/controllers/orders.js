@@ -11,13 +11,40 @@ var orders = {
     if(req.query.pageSize != null) pageSize = req.query.pageSize;
     if(req.query.pageNumber != null) pageNumber = req.query.pageNumber;
 
-    db.all("SELECT * from Commands, Command_Lines where Commands.id = Command_Lines.Command_Id Commands.id LIMIT ? OFFSET ?", pageSize, pageNumber, function(e, r){
-      console.log(r);
+    db.all("SELECT * from Commands LIMIT ? OFFSET ?",
+     pageSize, pageNumber, function(e, r){
+       if(e == null){
+         res.status(200).json({
+           pageSize: pageSize,
+           pageNumber: pageNumber,
+           items: r
+         }).end();
+       } else {
+         res.status(500).json({error: "Unable to get commands"}).end();
+       }
     });
   },
 
   getByUser: function(req, res){
 
+    var pageSize = 9;
+    var pageNumber = 0;
+
+    if(req.query.pageSize != null) pageSize = req.query.pageSize;
+    if(req.query.pageNumber != null) pageNumber = req.query.pageNumber;
+
+    db.all("SELECT * from Commands Where User_Id = ? LIMIT ? OFFSET ?",
+     req.params.id, pageSize, pageNumber, function(e, r){
+       if(e == null){
+         res.status(200).json({
+           pageSize: pageSize,
+           pageNumber: pageNumber,
+           items: r
+         }).end();
+       } else {
+         res.status(500).json({error: "Unable to get commands"}).end();
+       }
+    });
   },
 
   getOne: function(req, res){
@@ -57,6 +84,8 @@ var orders = {
   },
 
   create: function(req, res){
+    // add a new command to the database
+    // requires user id
 
   },
 
