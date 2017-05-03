@@ -37,7 +37,7 @@ var products = {
 
 
     //res.setHeader('Access-Control-Allow-Origin','*');
-    db.all("SELECT * from Products WHERE Name LIKE ? LIMIT ? OFFSET ?", [name, pageSize, pageNumber],
+    db.all("SELECT * from Products WHERE Name LIKE ? LIMIT ? OFFSET ?", [name, pageSize, pageNumber*pageSize],
     function(e, r) {
       if((r.length != 0) && (e == null)) {
         res.status(200).json({

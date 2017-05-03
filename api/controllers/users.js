@@ -35,7 +35,7 @@ var users = {
     }
     )
 
-    db.all("SELECT * FROM Users WHERE Login LIKE ? LIMIT ? OFFSET ?", [login ,pageSize, pageNumber],
+    db.all("SELECT * FROM Users WHERE Login LIKE ? LIMIT ? OFFSET ?", [login ,pageSize, pageNumber*pageSize],
       function(e, r) {
         if((r.length != 0) && (e == null)) {
           res.status(200).json({
