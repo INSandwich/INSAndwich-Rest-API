@@ -21,7 +21,7 @@ router.get('/users', users.getAll);
 router.get('/users/:id', users.getOne);
 router.get('/users/login/:Login', users.getLogin);
 router.post('/users', users.create);
-router.put('/users/:id/role', users.updateUserRole); 
+router.put('/users/:id/role', users.updateUserRole);
 router.put('/users/:id/tokens', users.updateTokens);
 router.post('/users/:id/add', users.addTokens);
 router.post('/users/:id/remove', users.removeTokens);
@@ -45,13 +45,11 @@ router.post('/products', products.create);
 router.put('/products/:id', products.update);
 router.delete('/products/:id', products.delete);
 
-
 // Orders controller
 router.get('/orders', orders.getAll);
 router.get('/orders/users/:id', orders.getByUser);
 router.get('/orders/:id', orders.getOne);
-router.post('/orders/:id', orders.create);
-router.put('/orders/:id', orders.update);
+router.post('/orders/users/:id', orders.create);
 router.delete('/orders/:id', orders.delete);
 
 module.exports = router;

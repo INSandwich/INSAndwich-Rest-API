@@ -86,15 +86,26 @@ var orders = {
   create: function(req, res){
     // add a new command to the database
     // requires user id
-
-  },
-
-  update: function(req, res){
-
+    db.run("INSERT INTO Commands(User_id) VALUES(?);", req.params.id, function(e, r){
+      if(e == null && this.changes != 0)
+      {
+        res.status(200).json({message: "Command insertion successfull"}).end();
+      }else {
+        console.log(e);
+        res.status(500).json({error: "Couldn't insert command into database"}).end();
+      }
+    });
   },
 
   delete: function(req, res){
-
+    // deletes command of given id
+    db.run("delete from Commands where Id = ?", req.params.id, function(e, r){
+      if(e == null && this.changes != 0){
+        res.status(200).json({message: "Deletion completed successfully"}).end();
+      }else {
+        res.status(500).json({error: "Unable to delete given command"})
+      }
+    });
   }
 }
 
