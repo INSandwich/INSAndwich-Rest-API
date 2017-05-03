@@ -97,7 +97,7 @@ var products = {
     }
     )
 
-    db.all("SELECT * FROM Products WHERE Category_Id = ? LIMIT ? OFFSET ?", [req.params.categoryId, pageSize, pageNumber],
+    db.all("SELECT * FROM Products WHERE Category_Id = ? LIMIT ? OFFSET ?", [req.params.categoryId, pageSize, pageNumber*pageSize],
       function(e, r) {
         if((r.length != 0) && (e == null)) {
           res.setHeader('Access-Control-Allow-Origin','*');
