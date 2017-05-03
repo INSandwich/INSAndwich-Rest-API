@@ -43,7 +43,7 @@ var products = {
         res.status(200).json({
           pageSize: pageSize,
           pageNumber: pageNumber,
-          pageCnt: pageCount,
+          pageCnt: parseInt(pageCount),
           items: r
 
         });
@@ -74,12 +74,29 @@ var products = {
   getCategory: function(req, res) {
     var pageSize = 9;
     var pageNumber = 0;
+    var pageCount;
     if(req.query.pageSize != null) {
       pageSize = req.query.pageSize;
     }
     if(req.query.pageNumber != null) {
       pageNumber = req.query.pageNumber;
     }
+
+    db.all("SELECT COUNT(*) as count from Products WHERE Category_Id = ?", [req.params.categoryId],
+    function(e, r){
+      if((r.length !=0) && ( e == null)){
+        itemCount = r[0].count;
+        console.log("r = ", itemCount);
+        pageCount = roundUp(itemCount/pageSize,1);
+        //console.log("PageCount = ",pageCount);
+      }else if(r.length == 0){
+        res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
+      }else{
+        res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+      }
+    }
+    )
+
     db.all("SELECT * FROM Products WHERE Category_Id = ? LIMIT ? OFFSET ?", [req.params.categoryId, pageSize, pageNumber],
       function(e, r) {
         if((r.length != 0) && (e == null)) {
@@ -87,6 +104,7 @@ var products = {
           res.status(200).json({
             pageSize: pageSize,
             pageNumber: pageNumber,
+            pageCnt : parseInt(pageCount),
             items: r
           });
         }
