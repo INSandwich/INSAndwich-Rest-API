@@ -2,6 +2,11 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('insandwich.db');
 var IsEmail = require('isemail');
 
+// precision is 10 for 10ths, 100 for 100ths, etc.
+function roundUp(num, precision) {
+return Math.ceil(num * precision) / precision
+}
+
 var users = {
   // Retrieve the list of users
   getAll: function(req, res) {
@@ -14,13 +19,30 @@ var users = {
     if(req.query.pageNumber != null) {
       pageNumber = req.query.pageNumber;
     }
+
+    db.all("SELECT COUNT(*) as count from Users WHERE Login LIKE ?", [login],
+    function(e, r){
+      if((r.length !=0) && ( e == null)){
+        itemCount = r[0].count;
+
+        pageCount = roundUp(itemCount/pageSize,1);
+        //console.log("UsersCount = ",pageCount);
+      }else if(r.length == 0){
+        res.status(500).json({error: "Couldn't get Users count", detail: "No Users retrieved."}).end();
+      }else{
+        res.status(500).json({error: "Couldn't get Users count", detail: e}).end();
+      }
+    }
+    )
+
     db.all("SELECT * FROM Users WHERE Login LIKE ? LIMIT ? OFFSET ?", [login ,pageSize, pageNumber],
       function(e, r) {
         if((r.length != 0) && (e == null)) {
           res.status(200).json({
             pageSize: pageSize,
             pageNumber: pageNumber,
-            items: r
+            items: r,
+            pageCnt : pageCount
           });
         }
         else if (r.length == 0) {

@@ -1,16 +1,40 @@
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('insandwich.db');
 
+// precision is 10 for 10ths, 100 for 100ths, etc.
+function roundUp(num, precision) {
+return Math.ceil(num * precision) / precision
+}
+
 var products = {
 
   getAll: function(req, res) {
     var pageSize = 9;
     var pageNumber = 0;
     var name = req.query.name ? "%"+req.query.name+"%" : "%";
+    var itemCount;
+    var pageCount;
     if(req.query.pageSize != null)
       pageSize = req.query.pageSize;
     if(req.query.pageNumber != null)
       pageNumber = req.query.pageNumber;
+
+
+    db.all("SELECT COUNT(*) as count from Products WHERE Name LIKE ?", [name],
+    function(e, r){
+      if((r.length !=0) && ( e == null)){
+        itemCount = r[0].count;
+        console.log("r = ", itemCount);
+        pageCount = roundUp(itemCount/pageSize,1);
+        //console.log("PageCount = ",pageCount);
+      }else if(r.length == 0){
+        res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
+      }else{
+        res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+      }
+    }
+    )
+
 
     //res.setHeader('Access-Control-Allow-Origin','*');
     db.all("SELECT * from Products WHERE Name LIKE ? LIMIT ? OFFSET ?", [name, pageSize, pageNumber],
@@ -19,7 +43,8 @@ var products = {
         res.status(200).json({
           pageSize: pageSize,
           pageNumber: pageNumber,
-          items: r
+          items: r,
+          pageCnt: pageCount
         });
       }
       else if (r.length == 0) {
