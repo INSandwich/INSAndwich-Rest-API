@@ -3,7 +3,10 @@ var db = new sqlite3.Database('insandwich.db');
 
 var orders = {
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/master
   getAll: function(req, res){
     var pageSize = 9;
     var pageNumber = 0;
@@ -70,7 +73,10 @@ var orders = {
 }
 
 module.exports = orders;
+<<<<<<< HEAD
 
 
 
 }
+=======
+>>>>>>> refs/remotes/origin/master
