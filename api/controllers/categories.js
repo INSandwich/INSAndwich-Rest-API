@@ -19,7 +19,7 @@ var categories = {
       if((e == null)) {
           res.status(200).json({
             pageSize: pageSize,
-            pageNumber: pageNumber,
+            pageNumber: parseInt(pageNumber),
             items: r
           });
       }

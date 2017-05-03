@@ -42,7 +42,7 @@ var products = {
       if((r.length != 0) && (e == null)) {
         res.status(200).json({
           pageSize: pageSize,
-          pageNumber: pageNumber,
+          pageNumber: parseInt(pageNumber),
           pageCnt: parseInt(pageCount),
           items: r
 
@@ -103,7 +103,7 @@ var products = {
           res.setHeader('Access-Control-Allow-Origin','*');
           res.status(200).json({
             pageSize: pageSize,
-            pageNumber: pageNumber,
+            pageNumber: parseInt(pageNumber),
             pageCnt : parseInt(pageCount),
             items: r
           });
