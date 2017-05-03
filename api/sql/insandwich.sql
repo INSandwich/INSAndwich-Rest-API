@@ -71,6 +71,13 @@ CREATE TABLE IF NOT EXISTS Commands(
   CONSTRAINT fk_user_id FOREIGN KEY (User_Id) REFERENCES Users(Id)
 );
 
+INSERT INTO Commands(User_id) VALUES(1);
+INSERT INTO Commands(User_id) VALUES(1);
+INSERT INTO Commands(User_id) VALUES(1);
+INSERT INTO Commands(User_id) VALUES(2);
+INSERT INTO Commands(User_id) VALUES(3);
+INSERT INTO Commands(User_id) VALUES(3);
+
 CREATE TABLE IF NOT EXISTS Command_Lines(
   Id INTEGER PRIMARY KEY AUTOINCREMENT,
   Amount INTEGER DEFAULT 1,
@@ -79,5 +86,11 @@ CREATE TABLE IF NOT EXISTS Command_Lines(
   CONSTRAINT fk_command_id FOREIGN KEY (Command_Id) REFERENCES Commands(Id),
   CONSTRAINT fk_product_id FOREIGN KEY (Product_Id) REFERENCES Products(Id)
 );
+
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(2, 1, 3);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(1, 1, 2);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(2, 2, 4);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(22, 2, 4);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(23, 2, 5);
 
 COMMIT;

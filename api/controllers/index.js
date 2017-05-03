@@ -5,6 +5,7 @@ var router = express.Router();
 var users = require('./users');
 var categories = require('./categories');
 var products = require('./products');
+var orders = require('./orders');
 
 // Roles Controller
 /*
@@ -43,6 +44,7 @@ router.get('/products/category/:categoryId', products.getCategory);
 router.post('/products', products.create);
 router.put('/products/:id', products.update);
 router.delete('/products/:id', products.delete);
+
 
 // Orders controller
 router.get('/orders', orders.getAll);
