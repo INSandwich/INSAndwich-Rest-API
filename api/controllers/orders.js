@@ -106,6 +106,22 @@ var orders = {
         res.status(500).json({error: "Unable to delete given command"})
       }
     });
+  },
+
+  getLine: function(req, res){
+
+  },
+
+  addLine: function(req, res){
+
+  },
+
+  updateLine: function(req, res){
+
+  },
+
+  deleteLine: function(req, res){
+
   }
 }
 
