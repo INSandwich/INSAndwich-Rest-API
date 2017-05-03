@@ -2,24 +2,48 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('insandwich.db');
 var IsEmail = require('isemail');
 
+// precision is 10 for 10ths, 100 for 100ths, etc.
+function roundUp(num, precision) {
+return Math.ceil(num * precision) / precision
+}
+
 var users = {
   // Retrieve the list of users
   getAll: function(req, res) {
     var pageSize = 5;
     var pageNumber = 0;
+    var login = req.query.login ? "%"+req.query.login+"%" : "%"; // Lambda expressions are bae
     if(req.query.pageSize != null) {
       pageSize = req.query.pageSize;
     }
     if(req.query.pageNumber != null) {
       pageNumber = req.query.pageNumber;
     }
-    db.all("SELECT * FROM Users LIMIT ? OFFSET ?", [pageSize, pageNumber],
+
+    db.all("SELECT COUNT(*) as count from Users WHERE Login LIKE ?", [login],
+    function(e, r){
+      if((r.length !=0) && ( e == null)){
+        itemCount = r[0].count;
+
+        pageCount = roundUp(itemCount/pageSize,1);
+        //console.log("UsersCount = ",pageCount);
+      }else if(r.length == 0){
+        res.status(500).json({error: "Couldn't get Users count", detail: "No Users retrieved."}).end();
+      }else{
+        res.status(500).json({error: "Couldn't get Users count", detail: e}).end();
+      }
+    }
+    )
+
+    db.all("SELECT * FROM Users WHERE Login LIKE ? LIMIT ? OFFSET ?", [login ,pageSize, pageNumber],
       function(e, r) {
         if((r.length != 0) && (e == null)) {
           res.status(200).json({
             pageSize: pageSize,
             pageNumber: pageNumber,
+            pageCnt : pageCount,
             items: r
+
           });
         }
         else if (r.length == 0) {
@@ -150,7 +174,7 @@ var users = {
 
   // Update the user's role
   updateUserRole: function(req, res) {
-    db.run("UPDATE Users SET Role_Id = ? WHERE Id = ?", [req.body.roleid, req.params.id],
+    db.run("UPDATE Users SET Role = ? WHERE Id = ?", [req.body.role, req.params.id],
       function(e, r) {
         //console.log(this);
         if((e == null) && (this.changes != 0)) {
@@ -245,7 +269,7 @@ var users = {
     db.all("SELECT Password FROM Users WHERE Id = ?", req.params.id,
       function(e, r) {
         if( (e == null) && (r.length != 0) ) {
-
+          console.log(r[0].Password, newPassword);
           //Checking if older password is okay
           //console.log(r[0].Password, password);
           if(password == r[0].Password && newPassword != 0){
@@ -261,8 +285,9 @@ var users = {
                 }
               }
             );
-          }else{
-            res.status(500).json({error: "Error updating user password : please enter your valid password."});
+
+          } else {
+            res.status(500).json({error: "Error updating user password", detail: "Ancien mot de passe non valide."}).end();
           }
         }
         else if (r.length == 0) {
@@ -311,7 +336,7 @@ var users = {
         }
       });
     }else{
-      res.status(500).json({error: "Please fill every field."});
+      res.status(500).json({error: "Error updating user", detail: "Please fill every field."}).end();
     }
 
 

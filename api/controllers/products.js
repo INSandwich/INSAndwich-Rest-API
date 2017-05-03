@@ -1,24 +1,51 @@
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('insandwich.db');
 
+// precision is 10 for 10ths, 100 for 100ths, etc.
+function roundUp(num, precision) {
+return Math.ceil(num * precision) / precision
+}
+
 var products = {
 
   getAll: function(req, res) {
     var pageSize = 9;
     var pageNumber = 0;
+    var name = req.query.name ? "%"+req.query.name+"%" : "%";
+    var itemCount;
+    var pageCount;
     if(req.query.pageSize != null)
       pageSize = req.query.pageSize;
     if(req.query.pageNumber != null)
       pageNumber = req.query.pageNumber;
 
+
+    db.all("SELECT COUNT(*) as count from Products WHERE Name LIKE ?", [name],
+    function(e, r){
+      if((r.length !=0) && ( e == null)){
+        itemCount = r[0].count;
+        console.log("r = ", itemCount);
+        pageCount = roundUp(itemCount/pageSize,1);
+        //console.log("PageCount = ",pageCount);
+      }else if(r.length == 0){
+        res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
+      }else{
+        res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+      }
+    }
+    )
+
+
     //res.setHeader('Access-Control-Allow-Origin','*');
-    db.all("SELECT * from Products LIMIT ? OFFSET ?", [pageSize, pageNumber],
+    db.all("SELECT * from Products WHERE Name LIKE ? LIMIT ? OFFSET ?", [name, pageSize, pageNumber],
     function(e, r) {
       if((r.length != 0) && (e == null)) {
         res.status(200).json({
           pageSize: pageSize,
           pageNumber: pageNumber,
+          pageCnt: pageCount,
           items: r
+
         });
       }
       else if (r.length == 0) {
@@ -96,7 +123,12 @@ var products = {
           res.setHeader('Access-Control-Allow-Origin','*');
           res.status(200).json({
             Id : Number(this.lastID),
-            Name : req.body.name
+            Name : req.body.name,
+            Description: description,
+            Available: available,
+            Image: req.body.image,
+            Price: req.body.price,
+            Category: req.body.category
           });
         } else {
           res.status(500).json({error : "Could not add product in database"}).end();
@@ -115,7 +147,15 @@ var products = {
     function(e, r){
       console.log("error status = ", e);
       if ((e == null) && (this.changes != 0)) {
-        res.status(200).json({ message: "Successfully updated product info" });
+        res.status(200).json({
+          Id : req.params.id,
+          Name : req.body.name,
+          Description: req.body.description,
+          Available: req.body.available,
+          Image: req.body.image,
+          Price: req.body.price,
+          Category: req.body.category
+        });
       }
       else {
         res.status(500).json({ error: "Error updating product.", detail: e }).end();
