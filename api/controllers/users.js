@@ -41,8 +41,9 @@ var users = {
           res.status(200).json({
             pageSize: pageSize,
             pageNumber: pageNumber,
-            items: r,
-            pageCnt : pageCount
+            pageCnt : pageCount,
+            items: r
+
           });
         }
         else if (r.length == 0) {
