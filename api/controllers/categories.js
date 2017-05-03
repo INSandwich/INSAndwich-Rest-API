@@ -14,7 +14,7 @@ var categories = {
     if(req.query.pageNumber != null) {
       pageNumber = req.query.pageNumber;
     }
-    db.all("SELECT * FROM Category LIMIT ? OFFSET ?", [pageSize, pageNumber],
+    db.all("SELECT * FROM Category LIMIT ? OFFSET ?", [pageSize, pageNumber*pageSize],
     function(e, r) {
       if((e == null)) {
           res.status(200).json({
