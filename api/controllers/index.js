@@ -54,7 +54,7 @@ router.delete('/orders/:id', orders.delete);
 // handle command lines
 router.get('/orders/lines/:id', orders.getLine);
 router.put('/orders/lines/:id', orders.addLine);
-router.update('/orders/lines/:id', orders.updateLine);
+router.post('/orders/lines/:id', orders.updateLine);
 router.delete('/orders/lines/:id', orders.deleteLine);
 
 

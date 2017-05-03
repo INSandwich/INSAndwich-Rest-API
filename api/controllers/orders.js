@@ -117,7 +117,9 @@ var orders = {
   },
 
   updateLine: function(req, res){
-
+    // updates a command line with supplied data
+    // INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(2, 1, 3);
+    
   },
 
   deleteLine: function(req, res){
