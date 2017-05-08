@@ -68,11 +68,12 @@ INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Va
 
 CREATE TABLE IF NOT EXISTS Commands(
   Id INTEGER PRIMARY KEY AUTOINCREMENT,
+  CreationDate TEXT,
+  IsPaid INTEGER default 0,
   User_Id INTEGER NOT NULL,
   CONSTRAINT fk_user_id FOREIGN KEY (User_Id) REFERENCES Users(Id)
 );
 
-INSERT INTO Commands(User_id) VALUES(1);
 INSERT INTO Commands(User_id) VALUES(1);
 INSERT INTO Commands(User_id) VALUES(1);
 INSERT INTO Commands(User_id) VALUES(2);

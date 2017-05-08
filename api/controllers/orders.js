@@ -109,21 +109,53 @@ var orders = {
   },
 
   getLine: function(req, res){
-
+    // retrieve a command line
+    db.all("SELECT * FROM Command_Lines WHERE Id = ?", req.params.id, function(e, r){
+      if(e == null && r[0] != null){
+        console.log(r);
+        res.status(200).json(r[0]).end();
+      }else{
+        res.status(500).json({error: "Unable to get command line"}).end();
+      }
+    });
   },
 
   addLine: function(req, res){
+    // add a new line to a given command
+    db.run("INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(?, ?, ?);",
+    [req.body.amount, req.body.command_id, req.body.product_id],
+    function(e, r){
+      if(e == null && this.changes != 0){
+        res.status(200).json({message: "Successfully added command line"}).end();
+      }else{
+        console.log(e);
+        res.status(500).json({error: "Unable to add line to command"}).end();
+      }
+    });
+  },
+
+  getLastUnpaid: function(req, res){
 
   },
 
   updateLine: function(req, res){
     // updates a command line with supplied data
     // INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(2, 1, 3);
-    
+    // TODO not tested yet
+    db.run("UPDATE Command_Lines SET Amount = ?, Command_Id = ?, Product_Id = ? where Id = ?",
+            [req.body.amount, req.body.command_id, req.body.product_id, req.params.id],
+    function(e, r){
+      if(e == null && this.changes != 0){
+        res.status(200).json({message: "Line update successfull"}).end();
+      }else {
+        res.status(500).json({error: "Unable to update line"}).end();
+      }
+    });
   },
 
   deleteLine: function(req, res){
-
+    // delete a given command line
+    // db.run("delete from Command_Lines where Id = ?", req.params.id)
   }
 }
 
