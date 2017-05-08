@@ -86,11 +86,12 @@ var orders = {
   create: function(req, res){
     // add a new command to the database
     // requires user id
-    db.run("INSERT INTO Commands(User_id) VALUES(?);", req.params.id, function(e, r){
+    var date = new Date();
+    db.run("INSERT INTO Commands(User_id, Creation_Date) VALUES(?, ?);", req.params.id, date.toISOString(), function(e, r){
       if(e == null && this.changes != 0)
       {
         res.status(200).json({message: "Command insertion successfull"}).end();
-      }else {
+      } else {
         console.log(e);
         res.status(500).json({error: "Couldn't insert command into database"}).end();
       }
@@ -135,7 +136,45 @@ var orders = {
   },
 
   getLastUnpaid: function(req, res){
+    console.log(req.params);
+    // retrieve last unpaid command with sum of items and total price
+    db.all("SELECT * FROM Commands WHERE Is_Paid = 0 and User_Id = ? ORDER BY Creation_Date DESC LIMIT 1",
+    req.params.userId,
+    function(e, r){
+      if(e == null){
+        db.all("select Command_Lines.Id as id, Amount as quantity, Name as name, Price as price \
+        from Command_Lines, Products where Command_Id = ? \
+        and Command_Lines.Product_Id = Products.Id",
+        r[0].Id,
+        function(error, result){
+          if(error == null){
+            // get total itemcount and price
+            db.all("select sum(Amount) as total, sum(Amount * Price) as totalPrice from Command_Lines, Products where Command_Lines.Command_Id = ? and Products.Id = Command_Lines.Product_Id;",
+            r[0].Id, function(e_fckcbacks, r_fckcbacks){
+              if(e_fckcbacks == null){
+                console.log(r_fckcbacks);
+                // eventually render json (ouf!)
+                res.status(200).json({
+                  Id:req.params.id,
+                  totalPrice: r_fckcbacks[0].totalPrice,
+                  totalQuantity: r_fckcbacks[0].total,
+                  creationDate: r[0].Creation_Date,
+                  lines: result
+                }).end();
+              }else{
+                res.status(500).json({error: "Unable to retrieve total price and item count"}).end();
+              }
+            })
+          } else {
+            console.log(error);
+            res.status(500).json({error: "Unable to get last unpaid command's lines"}).end();
+          }
+        });
 
+      }else{
+        res.status(500).json({error: "Unable to get last unpaid command for given user id"}).end();
+      }
+    });
   },
 
   updateLine: function(req, res){

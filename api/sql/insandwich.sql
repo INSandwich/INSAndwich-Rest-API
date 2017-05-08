@@ -68,17 +68,20 @@ INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Va
 
 CREATE TABLE IF NOT EXISTS Commands(
   Id INTEGER PRIMARY KEY AUTOINCREMENT,
-  CreationDate TEXT,
-  IsPaid INTEGER default 0,
+  Creation_Date TEXT NOT NULL,
+  Is_Paid INTEGER default 0,
   User_Id INTEGER NOT NULL,
   CONSTRAINT fk_user_id FOREIGN KEY (User_Id) REFERENCES Users(Id)
 );
 
-INSERT INTO Commands(User_id) VALUES(1);
-INSERT INTO Commands(User_id) VALUES(1);
-INSERT INTO Commands(User_id) VALUES(2);
-INSERT INTO Commands(User_id) VALUES(3);
-INSERT INTO Commands(User_id) VALUES(3);
+INSERT INTO Commands(User_id, Creation_Date) VALUES(1, "DDMMYYYY");
+INSERT INTO Commands(User_id, Creation_Date) VALUES(2, "DDMMYYYY");
+INSERT INTO Commands(User_id, Creation_Date) VALUES(3, "DDMMYYYY");
+INSERT INTO Commands(User_id, Creation_Date) VALUES(3, "DDMMYYYY"); 
+-- INSERT INTO Commands(User_id) VALUES(1);
+-- INSERT INTO Commands(User_id) VALUES(2);
+-- INSERT INTO Commands(User_id) VALUES(3);
+-- INSERT INTO Commands(User_id) VALUES(3);
 
 CREATE TABLE IF NOT EXISTS Command_Lines(
   Id INTEGER PRIMARY KEY AUTOINCREMENT,
