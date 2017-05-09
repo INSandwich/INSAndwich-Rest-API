@@ -2,21 +2,36 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('insandwich.db');
 
 var orders = {
-
-
   getAll: function(req, res){
     var pageSize = 9;
     var pageNumber = 0;
+    var pageCount = 0;
+    var itemCount = 0;
 
     if(req.query.pageSize != null) pageSize = req.query.pageSize;
     if(req.query.pageNumber != null) pageNumber = req.query.pageNumber;
 
+    db.all("SELECT COUNT(*) as count from Commands",
+      function(e, r){
+        if((r.length !=0) && ( e == null)){
+          itemCount = r[0].count;
+          pageCount = roundUp(itemCount/pageSize,1);
+          //console.log("PageCount = ",pageCount);
+        }else if(r.length == 0){
+          res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
+        }else{
+          res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+        }
+      }
+    );
+
     db.all("SELECT * from Commands LIMIT ? OFFSET ?",
-     pageSize, pageNumber, function(e, r){
+     pageSize, pageNumber*pageSize, function(e, r){
        if(e == null){
          res.status(200).json({
            pageSize: pageSize,
-           pageNumber: pageNumber,
+           pageNumber: parseInt(pageNumber),
+           pageCnt: parseInt(pageCount),
            items: r
          }).end();
        } else {
@@ -29,16 +44,32 @@ var orders = {
 
     var pageSize = 9;
     var pageNumber = 0;
+    var pageCount = 0;
 
     if(req.query.pageSize != null) pageSize = req.query.pageSize;
     if(req.query.pageNumber != null) pageNumber = req.query.pageNumber;
 
+    db.all("SELECT COUNT(*) as count from Commands Where User_Id = ?",
+      function(e, r){
+        if((r.length !=0) && ( e == null)){
+          var itemCount = r[0].count;
+          pageCount = roundUp(itemCount/pageSize,1);
+          //console.log("PageCount = ",pageCount);
+        }else if(r.length == 0){
+          res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
+        }else{
+          res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+        }
+      }
+    );
+
     db.all("SELECT * from Commands Where User_Id = ? LIMIT ? OFFSET ?",
-     req.params.id, pageSize, pageNumber, function(e, r){
+     req.params.id, pageSize, pageNumber*pageSize, function(e, r){
        if(e == null){
          res.status(200).json({
            pageSize: pageSize,
-           pageNumber: pageNumber,
+           pageNumber: parseInt(pageNumber),
+           pageCnt: parseInt(pageCount),
            items: r
          }).end();
        } else {
@@ -48,11 +79,7 @@ var orders = {
   },
 
   getOne: function(req, res){
-    var pageSize = 9;
-    var pageNumber = 0;
-
-    if(req.query.pageSize != null) pageSize = req.query.pageSize;
-    if(req.query.pageNumber != null) pageNumber = req.query.pageNumber;
+    // MON TOTAL WESH :)
 
     db.all("SELECT * FROM Commands WHERE Id = ?",
     req.params.id,
@@ -60,17 +87,15 @@ var orders = {
       if(e == null)
       {
         // retrieve command lines comming with the command
+        // lines non paginé
+
         db.all("SELECT * FROM Command_Lines WHERE Command_Id = ? LIMIT ? OFFSET ?",
         [req.params.id, pageSize, pageNumber*pageSize], function(error, result){
             if(error == null)
             {
               res.status(200).json({
                 commandInfo: r[0],
-                lines : {
-                  pageSize : pageSize,
-                  pageNumber : pageNumber,
-                  items: result
-                }
+                lines : result
               });
             } else {
               console.log(error);
@@ -115,9 +140,6 @@ var orders = {
         res.status(500).json({error: "Unable to delete given command"})
       }
     });
-
-
-
   },
 
   getLine: function(req, res){

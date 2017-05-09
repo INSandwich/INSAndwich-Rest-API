@@ -12,8 +12,8 @@ var products = {
     var pageSize = 9;
     var pageNumber = 0;
     var name = req.query.name ? "%"+req.query.name+"%" : "%";
-    var itemCount;
-    var pageCount;
+    var itemCount = 0;
+    var pageCount = 0;
     if(req.query.pageSize != null)
       pageSize = req.query.pageSize;
     if(req.query.pageNumber != null)
@@ -21,19 +21,19 @@ var products = {
 
 
     db.all("SELECT COUNT(*) as count from Products WHERE Name LIKE ?", [name],
-    function(e, r){
-      if((r.length !=0) && ( e == null)){
-        itemCount = r[0].count;
-        console.log("r = ", itemCount);
-        pageCount = roundUp(itemCount/pageSize,1);
-        //console.log("PageCount = ",pageCount);
-      }else if(r.length == 0){
-        res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
-      }else{
-        res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+      function(e, r){
+        if((r.length !=0) && ( e == null)){
+          itemCount = r[0].count;
+          console.log("r = ", itemCount);
+          pageCount = roundUp(itemCount/pageSize,1);
+          //console.log("PageCount = ",pageCount);
+        }else if(r.length == 0){
+          res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
+        }else{
+          res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+        }
       }
-    }
-    )
+    );
 
 
     //res.setHeader('Access-Control-Allow-Origin','*');
@@ -45,7 +45,6 @@ var products = {
           pageNumber: parseInt(pageNumber),
           pageCnt: parseInt(pageCount),
           items: r
-
         });
       }
       else if (r.length == 0) {
@@ -74,7 +73,7 @@ var products = {
   getCategory: function(req, res) {
     var pageSize = 9;
     var pageNumber = 0;
-    var pageCount;
+    var pageCount = 0;
     if(req.query.pageSize != null) {
       pageSize = req.query.pageSize;
     }
@@ -83,19 +82,19 @@ var products = {
     }
 
     db.all("SELECT COUNT(*) as count from Products WHERE Category_Id = ?", [req.params.categoryId],
-    function(e, r){
-      if((r.length !=0) && ( e == null)){
-        itemCount = r[0].count;
-        console.log("r = ", itemCount);
-        pageCount = roundUp(itemCount/pageSize,1);
-        //console.log("PageCount = ",pageCount);
-      }else if(r.length == 0){
-        res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
-      }else{
-        res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+      function(e, r){
+        if((r.length !=0) && ( e == null)){
+          var itemCount = r[0].count;
+          console.log("r = ", itemCount);
+          pageCount = roundUp(itemCount/pageSize,1);
+          //console.log("PageCount = ",pageCount);
+        }else if(r.length == 0){
+          res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
+        }else{
+          res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+        }
       }
-    }
-    )
+    );
 
     db.all("SELECT * FROM Products WHERE Category_Id = ? LIMIT ? OFFSET ?", [req.params.categoryId, pageSize, pageNumber*pageSize],
       function(e, r) {
