@@ -99,7 +99,7 @@ var orders = {
             if(error == null)
             {
               res.status(200).json({
-                commandInfo: r[0],
+                Id: r[0].Id,
                 lines : result
               });
             } else {
