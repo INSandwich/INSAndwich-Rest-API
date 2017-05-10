@@ -141,7 +141,6 @@ var orders = {
       {
         res.status(200).json({message: "Command insertion successfull"}).end();
       } else {
-        console.log(e);
         res.status(500).json({error: "Couldn't insert command into database"}).end();
       }
     });
@@ -182,8 +181,170 @@ var orders = {
 
   addLine: function(req, res){
     // add a new line to a given command
-    db.run("INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(?, ?, ?);",
-    [req.body.amount, req.body.command_id, req.body.product_id],
+    var commandId = 0;
+    var commandLineId = 0;
+    var date = new Date();
+    var shouldInsertInDb = false;
+    var shouldUpdateInDb = false;
+    //[req.body.amount, req.body.product_id, req.body.user_id]
+/*
+    console.log(req.body);
+      // Does the user have a last paid command?
+      db.all("SELECT * FROM Commands WHERE User_Id = ? AND Is_Paid = 0", [req.body.user_id],
+        function (r, e) {
+          if (e == null) {
+            if(r.length != 0) { // The user has an unpaid command -> Check
+              commandId = r[0].Id;
+            }
+          }
+          else {
+            res.status(500).json({error: "Error retrieving user command."}).end();
+          }
+        });
+
+        if(commandId != 0) { // The user has an unpaid command
+          db.all("SELECT * FROM Command_Lines WHERE Command_Id = ? AND Product_Id = ?",
+            [commandId, req.body.product_id], function(re, er) {
+              if(er == null) {
+                if(re.length == 0) { // There are not lines with such product_id
+                  shouldInsertInDb = true;
+                }
+                else {
+                  shouldUpdateInDb = true;
+                  commandLineId = re[0].Id;
+                }
+              }
+              else {
+                res.status(500).json({error: "Couldn't retrieve command lines with such command_id and product_id"}).end();
+              }
+            }
+          );
+        }
+        else { // créer la commande
+          db.run("INSERT INTO Commands (User_id, Creation_Date) VALUES (?, ?);",
+              [req.body.user_id, date.toISOString()], function(re, er) {
+                console.log(this, req.body);
+                if(er == null && this.changes != 0)
+                {
+                  db.run("INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(?, ?, ?);",
+                      [req.body.amount, this.lastID, req.body.product_id], function(error, result) {
+                        if(error == null && this.changes != 0) {
+                          res.status(200).json({message: "Successfully added command line"});
+                        }else{
+                          res.status(500).json({error: "Unable to add line to command"}).end();
+                        }
+                      });
+
+                } else {
+                  res.status(500).json({error: "Couldn't insert command into database"}).end();
+                }
+            });
+        }
+
+        // both db.run, depending on conditions
+        if(shouldUpdateInDb) {
+          // run update
+          db.run("UPDATE Command_Lines SET Amount = Amount + ? WHERE Id = ?", [req.body.amount, commandLineId],
+            function(result, error) {
+              if(error == null && this.changes != 0) {
+                res.status(200).json({message: "Successfully added command line"});
+              }
+              else {
+                res.status(500).json({error: "Unable to add line to command"}).end();
+              }
+            }
+          );
+        }
+        else if (shouldInsertInDb) {
+          // run insert
+          db.run("INSERT INTO Command_Lines (Amount, Command_Id, Product_Id) VALUES (?, ?, ?)",
+            [req.body.amount, commandId, req.body.product_id],
+              function(result, error) {
+                if(error == null && this.changes != 0) {
+                  res.status(200).json({message: "Successfully added command line"});
+                }
+                else {
+                  res.status(500).json({error: "Unable to add line to command"}).end();
+                }
+              }
+            );
+        }
+*/
+
+    // First we must see if the user has a last paid command
+    db.all("SELECT * FROM Commands WHERE User_Id = ? AND Is_Paid = 0", [req.body.user_id],
+      function (e, r) {
+        console.log(r, e);
+        if (e == null) {
+          if(r.length != 0) { // The user has an unpaid command -> Check
+            // Does the command already have a product associated to it?
+            db.all("SELECT * FROM Command_Lines WHERE Command_Id = ? AND Product_Id = ?",
+              [r[0].Id, req.body.product_id], function(er, re) {
+                if(er == null) {
+                  if(re.length == 0) { // There are not lines with such product_id
+                    db.run("INSERT INTO Command_Lines (Amount, Command_Id, Product_Id) VALUES (?, ?, ?)",
+                      [req.body.amount, r[0].Id, req.body.product_id],
+                        function(result, error) {
+                          if(error == null && this.changes != 0) {
+                            res.status(200).json({message: "Successfully added command line"}).end();
+                          }
+                          else {
+                            res.status(500).json({error: "Unable to add line to command"}).end();
+                          }
+                        }
+                      );
+                  }
+                  else { // we just update the re[0].amount
+                    db.run("UPDATE Command_Lines SET Amount = Amount + ? WHERE Id = ?", [req.body.amount, re[0].Id],
+                      function(result, error) {
+                        if(error == null && this.changes != 0) {
+                          res.status(200).json({message: "Successfully added command line"}).end();
+                        }
+                        else {
+                          res.status(500).json({error: "Unable to add line to command"}).end();
+                        }
+                      }
+                    );
+                  }
+                }
+                else {
+                  res.status(500).json({error: "Couldn't retrieve command lines with such command_id and product_id"}).end();
+                }
+              }
+            );
+          }
+          else { // The user doesn't have an unpaid command -> create it and insert the line
+              db.run("INSERT INTO Commands (User_id, Creation_Date) VALUES (?, ?);",
+                  [req.body.user_id, date.toISOString()], function(er, re){
+                    console.log(re, this);
+                    if(er == null && this.changes != 0)
+                    {
+                      db.run("INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(?, ?, ?);",
+                          [req.body.amount, this.lastID, req.body.product_id], function(error, result) {
+                            if(error == null && this.changes != 0) {
+                              res.status(200).json({message: "Successfully added command line"}).end();
+                            }else{
+                              res.status(500).json({error: "Unable to add line to command"}).end();
+                            }
+                          });
+
+                    } else {
+                      res.status(500).json({error: "Couldn't insert command into database"}).end();
+                    }
+                });
+            }
+          }
+          else {
+            res.status(500).json({error: "Error retrieving user command."}).end();
+          }
+        }
+      );
+    // If not -> Create a new command
+
+    // Then add the data to the command, or update a line with the amount if the product ids correspond
+
+    /*db.run("INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(?, ?, ?);",
+    [req.body.amount, commandId, req.body.product_id],
     function(e, r){
       if(e == null && this.changes != 0){
         res.status(200).json({message: "Successfully added command line"}).end();
@@ -191,7 +352,7 @@ var orders = {
         console.log(e);
         res.status(500).json({error: "Unable to add line to command"}).end();
       }
-    });
+    });*/
   },
 
   getLastUnpaid: function(req, res){
