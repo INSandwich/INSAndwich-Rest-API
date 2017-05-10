@@ -1,6 +1,11 @@
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('insandwich.db');
 
+// precision is 10 for 10ths, 100 for 100ths, etc.
+function roundUp(num, precision) {
+return Math.ceil(num * precision) / precision
+}
+
 var orders = {
   getAll: function(req, res){
     var pageSize = 9;
@@ -49,49 +54,33 @@ var orders = {
     if(req.query.pageSize != null) pageSize = req.query.pageSize;
     if(req.query.pageNumber != null) pageNumber = req.query.pageNumber;
 
-    /* Debug section*/
-    db.all("SELECT count(*) as count from Command_Lines, \
-    Commands where Commands.Id = Command_Lines.Command_Id \
-    and Commands.User_Id = ?;\
-    SELECT * from Command_Lines, Commands where \
-    Command_Lines.Command_Id = Commands.Id and\
-    Commands.User_Id = ?",
-    req.params.id,
-    function(e, r){
-      console.log(e);
-      console.log(r);
-      res.status(200).json(r).end();
+    db.all("SELECT COUNT(*) as count from Commands Where User_Id = ?", req.params.id,
+      function(e, r){
+        if((r.length !=0) && ( e == null)){
+          var itemCount = r[0].count;
+          pageCount = roundUp(itemCount/pageSize,1);
+          //console.log("PageCount = ",pageCount);
+        }else if(r.length == 0){
+          res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
+        }else{
+          res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+        }
+      }
+    );
+
+    db.all("SELECT * from Commands Where User_Id = ? LIMIT ? OFFSET ?",
+     req.params.id, pageSize, pageNumber*pageSize, function(e, r){
+       if(e == null){
+         res.status(200).json({
+           pageSize: pageSize,
+           pageNumber: parseInt(pageNumber),
+           pageCnt: parseInt(pageCount),
+           items: r
+         }).end();
+       } else {
+         res.status(500).json({error: "Unable to get commands"}).end();
+       }
     });
-
-    // count, totalprice, items with names
-
-    // db.all("SELECT COUNT(*) as count from Commands Where User_Id = ?",
-    //   function(e, r){
-    //     if((r.length !=0) && ( e == null)){
-    //       var itemCount = r[0].count;
-    //       pageCount = roundUp(itemCount/pageSize,1);
-    //       //console.log("PageCount = ",pageCount);
-    //     }else if(r.length == 0){
-    //       res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
-    //     }else{
-    //       res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
-    //     }
-    //   }
-    // );
-    //
-    // db.all("SELECT * from Commands Where User_Id = ? LIMIT ? OFFSET ?",
-    //  req.params.id, pageSize, pageNumber*pageSize, function(e, r){
-    //    if(e == null){
-    //      res.status(200).json({
-    //        pageSize: pageSize,
-    //        pageNumber: parseInt(pageNumber),
-    //        pageCnt: parseInt(pageCount),
-    //        items: r
-    //      }).end();
-    //    } else {
-    //      res.status(500).json({error: "Unable to get commands"}).end();
-    //    }
-    // });
   },
 
   getOne: function(req, res){
@@ -105,12 +94,12 @@ var orders = {
         // retrieve command lines comming with the command
         // lines non paginé
 
-        db.all("SELECT * FROM Command_Lines WHERE Command_Id = ? LIMIT ? OFFSET ?",
-        [req.params.id, pageSize, pageNumber*pageSize], function(error, result){
+        db.all("SELECT * FROM Command_Lines WHERE Command_Id = ?",
+        [req.params.id], function(error, result){
             if(error == null)
             {
               res.status(200).json({
-                commandInfo: r[0],
+                Id: r[0].Id,
                 lines : result
               });
             } else {
