@@ -141,20 +141,22 @@ var orders = {
   delete: function(req, res){
     // deletes command of given id
     // delete Command_Lines aswell as they are no longer meaningfull
-    db.run("delete from Command_Lines where Command_Lines.Command_Id = ?", req.params.id,
-    function(err, result){
-      if(err == null && this.changes != 0){
+
         db.run("delete from Commands where Id = ?", req.params.id, function(e, r){
           if(e == null && this.changes != 0){
-            res.status(200).json({message: "Deletion completed successfully"}).end();
+            db.run("delete from Command_Lines where Command_Lines.Command_Id = ?", req.params.id,
+            function(err, result){
+              if(err == null && this.changes != 0){
+                res.status(200).json({message: "Deletion completed successfully"}).end();
+              }else {
+                console.log("her");
+                res.status(200).json({error: err}).end();
+              }
+            });
           }else {
             res.status(500).json({error: "Unable to delete given command"})
           }
         });
-      }else {
-        res.status(500).json({error: "Unable to delete given command"})
-      }
-    });
   },
 
   getLine: function(req, res){
@@ -242,7 +244,7 @@ var orders = {
 
   deleteLine: function(req, res){
     // delete a given command line
-    db.run("delete from Command_Lines where Id = ?", req.params.id, function(e, r){
+    db.run("delete from Command_Lines where Command_Id = ? AND Id = ?", [req.params.commandId, req.params.id], function(e, r){
       if(e == null && this.changes != null){
         res.status(200).json({message: "Deleted command line successfully"}).end();
       }else {

@@ -55,7 +55,7 @@ router.delete('/orders/:id', orders.delete);
 router.get('/orders/lines/:id', orders.getLine);
 router.post('/orders/lines', orders.addLine);
 router.put('/orders/lines/:id', orders.updateLine);
-router.delete('/orders/lines/:id', orders.deleteLine);
+router.delete('/orders/:commandId/lines/:id', orders.deleteLine);
 
 router.get('/orders/last/:userId', orders.getLastUnpaid);
 
