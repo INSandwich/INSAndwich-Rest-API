@@ -193,7 +193,7 @@ var orders = {
                 console.log(r_fckcbacks);
                 // eventually render json (ouf!)
                 res.status(200).json({
-                  Id:req.params.id,
+                  Id:r[0].Id,
                   totalPrice: r_fckcbacks[0].totalPrice,
                   totalQuantity: r_fckcbacks[0].total,
                   creationDate: r[0].Creation_Date,
