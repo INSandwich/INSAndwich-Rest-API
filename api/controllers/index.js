@@ -57,6 +57,6 @@ router.post('/orders/lines', orders.addLine);
 router.put('/orders/lines/:id', orders.updateLine);
 router.delete('/orders/lines/:id', orders.deleteLine);
 
-router.get('/orders/:id/:userId', orders.getLastUnpaid);
+router.get('/orders/:userId/:id', orders.getLastUnpaid);
 
 module.exports = router;
