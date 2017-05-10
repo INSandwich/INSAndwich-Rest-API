@@ -110,5 +110,9 @@ INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(23, 2, 5);
 INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(12, 3, 5);
 INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(21, 3, 5);
 
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(12, 4, 5);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(21, 5, 10);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(12, 5, 12);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(12, 4, 8);
 
 COMMIT;

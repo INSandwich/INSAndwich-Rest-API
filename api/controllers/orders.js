@@ -54,11 +54,11 @@ var orders = {
     if(req.query.pageSize != null) pageSize = req.query.pageSize;
     if(req.query.pageNumber != null) pageNumber = req.query.pageNumber;
 
-    db.all("SELECT COUNT(*) as count from Commands Where User_Id = ?", req.params.id,
+    db.all("SELECT COUNT(*) as count from Commands Where User_Id = ? and Is_Paid != 0", req.params.id,
       function(e, r){
         if((r.length !=0) && ( e == null)){
           var itemCount = r[0].count;
-          pageCount = roundUp(itemCount/pageSize,1);
+          pageCount = roundUp(itemCount/pageSize, 1);
           //console.log("PageCount = ",pageCount);
 
         }else if(r.length == 0){
@@ -74,7 +74,7 @@ var orders = {
     Commands.*\
     from Commands, Command_Lines, Products\
     where Commands.Id = Command_Lines.Command_Id and Commands.User_Id = ?\
-    and Command_Lines.Product_Id = Products.Id and Command.isPaid != 0 group by Command_Lines.Command_Id\
+    and Command_Lines.Product_Id = Products.Id and Commands.Is_Paid != 0 group by Command_Lines.Command_Id\
     LIMIT ? OFFSET ?;",
     req.params.id,pageSize, pageNumber*pageSize,
     function(e, r){
@@ -87,6 +87,7 @@ var orders = {
     });
 
   },
+
 
   getOne: function(req, res){
     // MON TOTAL WESH :)
