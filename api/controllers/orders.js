@@ -49,33 +49,49 @@ var orders = {
     if(req.query.pageSize != null) pageSize = req.query.pageSize;
     if(req.query.pageNumber != null) pageNumber = req.query.pageNumber;
 
-    db.all("SELECT COUNT(*) as count from Commands Where User_Id = ?",
-      function(e, r){
-        if((r.length !=0) && ( e == null)){
-          var itemCount = r[0].count;
-          pageCount = roundUp(itemCount/pageSize,1);
-          //console.log("PageCount = ",pageCount);
-        }else if(r.length == 0){
-          res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
-        }else{
-          res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
-        }
-      }
-    );
-
-    db.all("SELECT * from Commands Where User_Id = ? LIMIT ? OFFSET ?",
-     req.params.id, pageSize, pageNumber*pageSize, function(e, r){
-       if(e == null){
-         res.status(200).json({
-           pageSize: pageSize,
-           pageNumber: parseInt(pageNumber),
-           pageCnt: parseInt(pageCount),
-           items: r
-         }).end();
-       } else {
-         res.status(500).json({error: "Unable to get commands"}).end();
-       }
+    /* Debug section*/
+    db.all("SELECT count(*) as count from Command_Lines, \
+    Commands where Commands.Id = Command_Lines.Command_Id \
+    and Commands.User_Id = ?;\
+    SELECT * from Command_Lines, Commands where \
+    Command_Lines.Command_Id = Commands.Id and\
+    Commands.User_Id = ?",
+    req.params.id,
+    function(e, r){
+      console.log(e);
+      console.log(r);
+      res.status(200).json(r).end();
     });
+
+    // count, totalprice, items with names
+
+    // db.all("SELECT COUNT(*) as count from Commands Where User_Id = ?",
+    //   function(e, r){
+    //     if((r.length !=0) && ( e == null)){
+    //       var itemCount = r[0].count;
+    //       pageCount = roundUp(itemCount/pageSize,1);
+    //       //console.log("PageCount = ",pageCount);
+    //     }else if(r.length == 0){
+    //       res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
+    //     }else{
+    //       res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+    //     }
+    //   }
+    // );
+    //
+    // db.all("SELECT * from Commands Where User_Id = ? LIMIT ? OFFSET ?",
+    //  req.params.id, pageSize, pageNumber*pageSize, function(e, r){
+    //    if(e == null){
+    //      res.status(200).json({
+    //        pageSize: pageSize,
+    //        pageNumber: parseInt(pageNumber),
+    //        pageCnt: parseInt(pageCount),
+    //        items: r
+    //      }).end();
+    //    } else {
+    //      res.status(500).json({error: "Unable to get commands"}).end();
+    //    }
+    // });
   },
 
   getOne: function(req, res){
