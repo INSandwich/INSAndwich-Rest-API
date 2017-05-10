@@ -68,17 +68,17 @@ var users = {
 
     var tokstring = token();
 
-    token();
+    token(); // -> WTF DUFEIL ??? 
 
     var password = req.body.password;
     var login = req.body.login;
 
-    db.all("SELECT Password, Role FROM Users WHERE Login LIKE ?", req.body.login,
+    db.all("SELECT Password, Role, Id FROM Users WHERE Login LIKE ?", req.body.login,
       function(e, r) {
         if( (e == null) && (r.length != 0) ) {
           if(password == r[0].Password){
               //res.setHeader('Access-Control-Allow-Origin','*');
-              res.status(200).json({ message: "Successfully logged in", token : tokstring, login : login, role: r[0].Role });
+              res.status(200).json({ message: "Successfully logged in", token : tokstring, login : login, role: r[0].Role, id: parseInt(r[0].Id) });
           }
           else {
             res.status(500).json({ error: "Authentification error", detail: "Login ou mot de passe incorrect."})

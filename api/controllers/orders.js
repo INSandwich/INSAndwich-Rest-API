@@ -1,6 +1,11 @@
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('insandwich.db');
 
+// precision is 10 for 10ths, 100 for 100ths, etc.
+function roundUp(num, precision) {
+return Math.ceil(num * precision) / precision
+}
+
 var orders = {
   getAll: function(req, res){
     var pageSize = 9;
@@ -49,7 +54,7 @@ var orders = {
     if(req.query.pageSize != null) pageSize = req.query.pageSize;
     if(req.query.pageNumber != null) pageNumber = req.query.pageNumber;
 
-    db.all("SELECT COUNT(*) as count from Commands Where User_Id = ?",
+    db.all("SELECT COUNT(*) as count from Commands Where User_Id = ?", req.params.id,
       function(e, r){
         if((r.length !=0) && ( e == null)){
           var itemCount = r[0].count;
