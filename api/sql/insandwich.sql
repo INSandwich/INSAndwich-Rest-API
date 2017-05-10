@@ -79,10 +79,6 @@ INSERT INTO Commands(User_id, Creation_Date) VALUES(2, "DDMMYYYY");
 INSERT INTO Commands(User_id, Creation_Date) VALUES(2, "DDMMYYYY");
 INSERT INTO Commands(User_id, Creation_Date) VALUES(3, "DDMMYYYY");
 INSERT INTO Commands(User_id, Creation_Date) VALUES(3, "DDMMYYYY");
-<<<<<<< HEAD
-=======
-INSERT INTO Commands(User_id, Creation_Date) VALUES(3, "DDMMYYYY");
->>>>>>> e0198bd9a735a2cad2c82af5f7ae4d24d4773513
 -- INSERT INTO Commands(User_id) VALUES(1);
 -- INSERT INTO Commands(User_id) VALUES(2);
 -- INSERT INTO Commands(User_id) VALUES(3);
@@ -104,5 +100,8 @@ INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(22, 2, 4);
 INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(2, 3, 4);
 INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(5, 3, 6);
 INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(23, 2, 5);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(12, 3, 5);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(21, 3, 5);
+
 
 COMMIT;

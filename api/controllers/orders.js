@@ -60,6 +60,7 @@ var orders = {
           var itemCount = r[0].count;
           pageCount = roundUp(itemCount/pageSize,1);
           //console.log("PageCount = ",pageCount);
+
         }else if(r.length == 0){
           res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
         }else{
@@ -68,19 +69,23 @@ var orders = {
       }
     );
 
-    db.all("SELECT * from Commands Where User_Id = ? AND isPaid != 0 LIMIT ? OFFSET ?",
-     req.params.id, pageSize, pageNumber*pageSize, function(e, r){
-       if(e == null){
-         res.status(200).json({
-           pageSize: pageSize,
-           pageNumber: parseInt(pageNumber),
-           pageCnt: parseInt(pageCount),
-           items: r
-         }).end();
-       } else {
-         res.status(500).json({error: "Unable to get commands"}).end();
-       }
+    db.all("select sum(Command_Lines.Amount) as total,\
+    sum(Command_Lines.Amount * Products.Price) as totalPrice,\
+    Commands.*\
+    from Commands, Command_Lines, Products\
+    where Commands.Id = Command_Lines.Command_Id and Commands.User_Id = ?\
+    and Command_Lines.Product_Id = Products.Id group by Command_Lines.Command_Id\
+    LIMIT ? OFFSET ?;",
+    req.params.id,pageSize, pageNumber*pageSize,
+    function(e, r){
+      res.status(200).json({
+        pageSize: pageSize,
+        pageNumber: parseInt(pageNumber),
+        pageCnt: parseInt(pageCount),
+        items: r
+      }).end();
     });
+
   },
 
   getOne: function(req, res){
