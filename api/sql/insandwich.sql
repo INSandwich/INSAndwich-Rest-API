@@ -76,9 +76,16 @@ CREATE TABLE IF NOT EXISTS Commands(
 
 INSERT INTO Commands(User_id, Creation_Date) VALUES(1, "DDMMYYYY");
 INSERT INTO Commands(User_id, Creation_Date) VALUES(2, "DDMMYYYY");
-INSERT INTO Commands(User_id, Creation_Date) VALUES(2, "DDMMYYYY");
-INSERT INTO Commands(User_id, Creation_Date) VALUES(3, "DDMMYYYY");
-INSERT INTO Commands(User_id, Creation_Date) VALUES(3, "DDMMYYYY");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
+
 -- INSERT INTO Commands(User_id) VALUES(1);
 -- INSERT INTO Commands(User_id) VALUES(2);
 -- INSERT INTO Commands(User_id) VALUES(3);
