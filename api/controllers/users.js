@@ -65,36 +65,116 @@ var users = {
     var token = function() {
         return rand() + rand(); // to make it longer
     };
+    var cartSize = 0;
+
 
     var tokstring = token();
 
-    token(); // -> WTF DUFEIL ??? 
+    token(); // -> WTF DUFEIL ???
 
     var password = req.body.password;
     var login = req.body.login;
+    var Usid;
+    var lastOrderId;
+
 
     db.all("SELECT Password, Role, Id FROM Users WHERE Login LIKE ?", req.body.login,
       function(e, r) {
-        if( (e == null) && (r.length != 0) ) {
-          if(password == r[0].Password){
-              //res.setHeader('Access-Control-Allow-Origin','*');
-              res.status(200).json({ message: "Successfully logged in", token : tokstring, login : login, role: r[0].Role, id: parseInt(r[0].Id) });
-          }
-          else {
-            res.status(500).json({ error: "Authentification error", detail: "Login ou mot de passe incorrect."})
-          }
-       }
-       else if (r.length == 0) {
-         //res.setHeader('Access-Control-Allow-Origin','*');
-         res.status(500).json({ error: "Error retrieving user.", detail: "Login ou mot de passe incorrect." }).end();
-       }
-       else {
-         //res.setHeader('Access-Control-Allow-Origin','*');
+        if(e == null){
+          Usid = parseInt(r[0].Id);
+          //555555555555555555555555555555555555555555555//
+          db.all("SELECT * FROM Commands WHERE Is_Paid = 0 and User_Id = ? ORDER BY Creation_Date DESC LIMIT 1",
+          Usid,
+          function(er, re){
+            //44444444444444444444444444444444444444444444//
+            if(er == null){
+              //3333333333333333333333333333333333333333333//
+              if(re != null){
+              //console.log("RE : ", re);
 
-         res.status(500).json({ error: "Error : blank request.", detail: e }).end();
-       }
+              //22222222222222222222222222222222222222222222//
+              db.all("select Command_Lines.Id as id, Amount as quantity, Name as name \
+              from Command_Lines, Products where Command_Id = ? \
+              and Command_Lines.Product_Id = Products.Id",
+              re[0].Id,
+              function(error, result){
+                if(error == null){
+                  // get total itemcount and price
+                  //11111111111111111111111111111111111111111//
+                  db.all("select sum(Amount) as total from Command_Lines, Products where Command_Lines.Command_Id = ? and Products.Id = Command_Lines.Product_Id;",
+                  re[0].Id, function(e_fckcbacks, r_fckcbacks){
+                    if(e_fckcbacks == null){
+                      lastOrderId = re[0].Id;
+                      cartSize = r_fckcbacks[0].total;
+                      if(r.length != 0) {
+                        if(password == r[0].Password){
+                          res.status(200).json({
+                             message: "Successfully logged in",
+                             token : tokstring,
+                             login : login,
+                             role : r[0].Role,
+                             id : Usid,
+                             cartSize : cartSize,
+                             lastOrderId : lastOrderId
+                          }).end();
 
-    });
+                        }else{
+                          res.status(500).json({ error: "Authentification error", detail: "Login ou mot de passe incorrect."}).end()
+                        }
+                     }else if(r.length == 0){
+                       //res.setHeader('Access-Control-Allow-Origin','*');
+                       res.status(500).json({ error: "Error retrieving user.", detail: "Login ou mot de passe incorrect." }).end();
+                     }else{
+                       res.status(500).json({ error: "Error : blank request.", detail: e }).end();
+                     }
+                  }else{
+                    res.status(500).json({error: "Unable to retrieve total price and item count"}).end();
+                  }
+                })
+                //11111111111111111111111111111111111111111//
+                }else{
+                  console.log(error);
+                  res.status(500).json({error: "Unable to get last unpaid command's lines"}).end();
+                }
+              });
+              //2222222222222222222222222222222222222222222//
+            }else{
+              if(r.length != 0) {
+                if(password == r[0].Password){
+                    res.status(200).json({
+                     message: "Successfully logged in",
+                     token : tokstring,
+                     login : login,
+                     role : r[0].Role,
+                     id : Usid,
+                     cartSize : 0,
+                     lastOrderId : 0
+                   }).end();
+
+                }else{
+                  res.status(500).json({ error: "Authentification error", detail: "Login ou mot de passe incorrect."}).end()
+                }
+              }else if (r.length == 0){
+                  //res.setHeader('Access-Control-Allow-Origin','*');
+                  res.status(500).json({ error: "Error retrieving user.", detail: "Login ou mot de passe incorrect." }).end();
+              }else{
+                  res.status(500).json({ error: "Error : blank request.", detail: e }).end();
+              }
+          }
+          //3333333333333333333333333333333333333333333//
+
+        }else{
+          console.log(error);
+          res.status(500).json({error: "Unable to get last unpaid command's lines"}).end();
+        }
+        //44444444444444444444444444444444444444444444//
+      });
+      //55555555555555555555555555555555555555555555//
+            }else{
+              console.log("Erreur :", er);
+              res.status(500).json({error: "Unable to get last unpaid command for given user id"}).end();
+            }
+        });
   },
 
   // Retrieve an user by its ID
@@ -102,7 +182,7 @@ var users = {
     db.all("SELECT * FROM Users WHERE Id = ?", req.params.id,
       function(e, r) {
         if( (e == null) && (r.length != 0) ) {
-          res.status(200).json(r);
+          res.status(200).json(r).end();
         }
         else if (r.length == 0) {
           res.status(500).json({ error: "Error retrieving user.", detail: "No user with this Id." }).end();

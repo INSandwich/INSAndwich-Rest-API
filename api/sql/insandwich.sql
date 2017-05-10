@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS Products(
 );
 
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Kebab", "Le classique kebab, toujours la star des sandwicheries. Laissez vous tenter par cette douceur turque. Le terme kebab signifie « grillade », « viande grillée » et désigne différents plats à base de viande grillée dans de nombreux pays ayant généralement fait partie des mondes ottoman et perse (dont l'Inde du Nord)1,2,3. Dans son utilisation francophone, comme dans d'autres langues occidentales, le terme utilisé seul désigne spécifiquement le sandwich fourré de viande grillée à la broche ou döner kebab, ainsi que, par métonymie, le type de restaurant qui le sert. Parmi les équivalents les plus courants du terme döner kebab, le mot shawarma (et ses variantes) est utilisé au Moyen-Orient. Ces termes désignent tous, soit la viande et son mode de préparation, soit le sandwich correspondant.", 1, "http://www.goldenmoustache.com/wp-content/uploads/2016/05/2b5747be-847b-42d4-a9d0-cd919b159c9e_maxi-kebab-vip-mag-171-1.jpg", 2.5, 1);
-INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Galette Saucisse", "La Bretagne au rendez vous, quoi de mieux qu'une bonne saucisse enroulée dans sa galette pour se remémorer son beau pays?", 1, "http://tyvince.fr/wp-content/uploads/2015/02/galette-saucisse.png", 2.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Galette Saucisse", "La Bretagne au rendez vous, quoi de mieux qu'une bonne saucisse enroulée dans sa galette pour se remémorer son beau pays?", 1, "http://cache.cuisineetvinsdefrance.com/data/photo/w350_h350_c18/4h/galettesaucisse.jpg", 2.5, 1);
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Tacos", "Parlons peu, parlons bien, quel est le sandwich préféré des étudiants ? Bien evidemment le tacos ! Goutez à ce concentré d'énergie !", 1, "http://mustikebab.com/wp-content/uploads/2016/02/Tacos-poulet-musti-kebab.jpg", 3.5, 1);
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Triade de Triangles", "Le connu et reconnu triangle, repas des guerriers et des routiers.", 1, "https://media.meltyfood.fr/article-2201321-fb-f1399368689/les-raisons-scientifiques-du-sandwich-triangle.jpg", 1.5, 1);
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Bagel Carnivore", "Du bacon, du jambon de pays, du jambon cuit.", 1, "http://bigapplebagels.com/media/1032/menu-intro_deli-sandwich.png", 1.5, 1);
@@ -97,6 +97,8 @@ INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(2, 1, 3);
 INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(1, 1, 2);
 INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(2, 2, 4);
 INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(22, 2, 4);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(2, 3, 4);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(5, 3, 6);
 INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(23, 2, 5);
 INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(12, 3, 5);
 INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(21, 3, 5);

@@ -86,32 +86,6 @@ var orders = {
       }).end();
     });
 
-    // db.all("SELECT * from Commands Where User_Id = ? LIMIT ? OFFSET ?",
-    //  req.params.id, pageSize, pageNumber*pageSize, function(e, r){
-    //    if(e == null){
-    //
-    //
-    //      res.status(200).json({
-    //        pageSize: pageSize,
-    //        pageNumber: parseInt(pageNumber),
-    //        pageCnt: parseInt(pageCount),
-    //        items: r
-    //      }).end();
-    //    } else {
-    //      res.status(500).json({error: "Unable to get commands"}).end();
-    //    }
-    // });
-
-
-
-    // retrieves Amounts of commands of a given user_id, and total price
-    /*select sum(Command_Lines.Amount) as total,
-    sum(Command_Lines.Amount * Products.Price) as totalPrice
-    from Commands, Command_Lines, Products
-    where Commands.Id = Command_Lines.Command_Id and Commands.User_Id = 2
-    and Command_Lines.Product_Id = Products.Id group by Command_Lines.Command_Id;
-
-    */
   },
 
   getOne: function(req, res){
@@ -125,10 +99,12 @@ var orders = {
         // retrieve command lines comming with the command
         // lines non paginé
 
-        db.all("SELECT * FROM Command_Lines WHERE Command_Id = ?",
+        db.all("SELECT Command_Lines.*, Products.Name FROM Command_Lines, Products WHERE Command_Id = ? AND Products.Id = Command_Lines.Id",
         [req.params.id], function(error, result){
+            //console.log(result);
             if(error == null)
             {
+
               res.status(200).json({
                 Id: r[0].Id,
                 lines : result
@@ -224,7 +200,7 @@ var orders = {
                 console.log(r_fckcbacks);
                 // eventually render json (ouf!)
                 res.status(200).json({
-                  Id:req.params.id,
+                  Id:r[0].Id,
                   totalPrice: r_fckcbacks[0].totalPrice,
                   totalQuantity: r_fckcbacks[0].total,
                   creationDate: r[0].Creation_Date,
@@ -272,5 +248,7 @@ var orders = {
     });
   }
 }
+
+
 
 module.exports = orders;
