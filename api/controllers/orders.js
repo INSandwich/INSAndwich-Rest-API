@@ -91,6 +91,7 @@ var orders = {
 
   getOne: function(req, res){
     // MON TOTAL WESH :)
+     totalPrice = 0;
 
     db.all("SELECT * FROM Commands WHERE Id = ?",
     req.params.id,
@@ -99,17 +100,25 @@ var orders = {
       {
         // retrieve command lines comming with the command
         // lines non paginé
-
         db.all("SELECT Command_Lines.*, Products.Name, Products.Price FROM Command_Lines,\
               Products WHERE Command_Id = ? AND Products.Id = Command_Lines.Id",
         [req.params.id], function(error, result){
-            //console.log(result);
+            console.log(result.length);
+            console.log(result[0]);
+            console.log(result[2]);
+
+            for (i = 0; i < result.length; i++) {
+                totalPrice = totalPrice + (parseFloat(result[i].Amount)*parseFloat(result[i].Price));
+                console.log("TotalPrice", totalPrice);
+            }
+
             if(error == null)
             {
 
               res.status(200).json({
                 Id: r[0].Id,
-                CreationDate: r[0].Creation_Date,
+                CreationDate : r[0].Creation_Date,
+                totalPrice : totalPrice,
                 lines : result
               });
             } else {
