@@ -54,12 +54,13 @@ var orders = {
     if(req.query.pageSize != null) pageSize = req.query.pageSize;
     if(req.query.pageNumber != null) pageNumber = req.query.pageNumber;
 
-    db.all("SELECT COUNT(*) as count from Commands Where User_Id = ?", req.params.id,
+    db.all("SELECT COUNT(*) as count from Commands Where User_Id = ? and Is_Paid != 0", req.params.id,
       function(e, r){
         if((r.length !=0) && ( e == null)){
           var itemCount = r[0].count;
-          pageCount = roundUp(itemCount/pageSize,1);
+          pageCount = roundUp(itemCount/pageSize, 1);
           //console.log("PageCount = ",pageCount);
+
         }else if(r.length == 0){
           res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
         }else{
@@ -68,20 +69,25 @@ var orders = {
       }
     );
 
-    db.all("SELECT * from Commands Where User_Id = ? LIMIT ? OFFSET ?",
-     req.params.id, pageSize, pageNumber*pageSize, function(e, r){
-       if(e == null){
-         res.status(200).json({
-           pageSize: pageSize,
-           pageNumber: parseInt(pageNumber),
-           pageCnt: parseInt(pageCount),
-           items: r
-         }).end();
-       } else {
-         res.status(500).json({error: "Unable to get commands"}).end();
-       }
+    db.all("select sum(Command_Lines.Amount) as total,\
+    sum(Command_Lines.Amount * Products.Price) as totalPrice,\
+    Commands.*\
+    from Commands, Command_Lines, Products\
+    where Commands.Id = Command_Lines.Command_Id and Commands.User_Id = ?\
+    and Command_Lines.Product_Id = Products.Id and Commands.Is_Paid != 0 group by Command_Lines.Command_Id\
+    LIMIT ? OFFSET ?;",
+    req.params.id,pageSize, pageNumber*pageSize,
+    function(e, r){
+      res.status(200).json({
+        pageSize: pageSize,
+        pageNumber: parseInt(pageNumber),
+        pageCnt: parseInt(pageCount),
+        items: r
+      }).end();
     });
+
   },
+
 
   getOne: function(req, res){
     // MON TOTAL WESH :)
@@ -94,8 +100,8 @@ var orders = {
       {
         // retrieve command lines comming with the command
         // lines non paginé
-
-        db.all("SELECT Command_Lines.*, Products.Name, Products.Price FROM Command_Lines, Products WHERE Command_Id = ? AND Products.Id = Command_Lines.Id",
+        db.all("SELECT Command_Lines.*, Products.Name, Products.Price FROM Command_Lines,\
+              Products WHERE Command_Id = ? AND Products.Id = Command_Lines.Id",
         [req.params.id], function(error, result){
             console.log(result.length);
             console.log(result[0]);
