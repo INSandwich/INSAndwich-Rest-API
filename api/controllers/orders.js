@@ -68,7 +68,7 @@ var orders = {
       }
     );
 
-    db.all("SELECT * from Commands Where User_Id = ? LIMIT ? OFFSET ?",
+    db.all("SELECT * from Commands Where User_Id = ? AND isPaid != 0 LIMIT ? OFFSET ?",
      req.params.id, pageSize, pageNumber*pageSize, function(e, r){
        if(e == null){
          res.status(200).json({
@@ -94,7 +94,8 @@ var orders = {
         // retrieve command lines comming with the command
         // lines non paginé
 
-        db.all("SELECT Command_Lines.*, Products.Name FROM Command_Lines, Products WHERE Command_Id = ? AND Products.Id = Command_Lines.Id",
+        db.all("SELECT Command_Lines.*, Products.Name, Products.Price FROM Command_Lines,\
+              Products WHERE Command_Id = ? AND Products.Id = Command_Lines.Id",
         [req.params.id], function(error, result){
             //console.log(result);
             if(error == null)
@@ -102,6 +103,7 @@ var orders = {
 
               res.status(200).json({
                 Id: r[0].Id,
+                CreationDate: r[0].Creation_Date,
                 lines : result
               });
             } else {
