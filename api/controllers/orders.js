@@ -187,89 +187,6 @@ var orders = {
     var shouldInsertInDb = false;
     var shouldUpdateInDb = false;
     //[req.body.amount, req.body.product_id, req.body.user_id]
-/*
-    console.log(req.body);
-      // Does the user have a last paid command?
-      db.all("SELECT * FROM Commands WHERE User_Id = ? AND Is_Paid = 0", [req.body.user_id],
-        function (r, e) {
-          if (e == null) {
-            if(r.length != 0) { // The user has an unpaid command -> Check
-              commandId = r[0].Id;
-            }
-          }
-          else {
-            res.status(500).json({error: "Error retrieving user command."}).end();
-          }
-        });
-
-        if(commandId != 0) { // The user has an unpaid command
-          db.all("SELECT * FROM Command_Lines WHERE Command_Id = ? AND Product_Id = ?",
-            [commandId, req.body.product_id], function(re, er) {
-              if(er == null) {
-                if(re.length == 0) { // There are not lines with such product_id
-                  shouldInsertInDb = true;
-                }
-                else {
-                  shouldUpdateInDb = true;
-                  commandLineId = re[0].Id;
-                }
-              }
-              else {
-                res.status(500).json({error: "Couldn't retrieve command lines with such command_id and product_id"}).end();
-              }
-            }
-          );
-        }
-        else { // créer la commande
-          db.run("INSERT INTO Commands (User_id, Creation_Date) VALUES (?, ?);",
-              [req.body.user_id, date.toISOString()], function(re, er) {
-                console.log(this, req.body);
-                if(er == null && this.changes != 0)
-                {
-                  db.run("INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(?, ?, ?);",
-                      [req.body.amount, this.lastID, req.body.product_id], function(error, result) {
-                        if(error == null && this.changes != 0) {
-                          res.status(200).json({message: "Successfully added command line"});
-                        }else{
-                          res.status(500).json({error: "Unable to add line to command"}).end();
-                        }
-                      });
-
-                } else {
-                  res.status(500).json({error: "Couldn't insert command into database"}).end();
-                }
-            });
-        }
-
-        // both db.run, depending on conditions
-        if(shouldUpdateInDb) {
-          // run update
-          db.run("UPDATE Command_Lines SET Amount = Amount + ? WHERE Id = ?", [req.body.amount, commandLineId],
-            function(result, error) {
-              if(error == null && this.changes != 0) {
-                res.status(200).json({message: "Successfully added command line"});
-              }
-              else {
-                res.status(500).json({error: "Unable to add line to command"}).end();
-              }
-            }
-          );
-        }
-        else if (shouldInsertInDb) {
-          // run insert
-          db.run("INSERT INTO Command_Lines (Amount, Command_Id, Product_Id) VALUES (?, ?, ?)",
-            [req.body.amount, commandId, req.body.product_id],
-              function(result, error) {
-                if(error == null && this.changes != 0) {
-                  res.status(200).json({message: "Successfully added command line"});
-                }
-                else {
-                  res.status(500).json({error: "Unable to add line to command"}).end();
-                }
-              }
-            );
-        }
-*/
 
     // First we must see if the user has a last paid command
     db.all("SELECT * FROM Commands WHERE User_Id = ? AND Is_Paid = 0", [req.body.user_id],
@@ -286,7 +203,7 @@ var orders = {
                       [req.body.amount, r[0].Id, req.body.product_id],
                         function(result, error) {
                           if(error == null && this.changes != 0) {
-                            res.status(200).json({message: "Successfully added command line"}).end();
+                            res.status(200).json({id: r[0].Id, message: "Successfully inserted command line"}).end();
                           }
                           else {
                             res.status(500).json({error: "Unable to add line to command"}).end();
@@ -298,7 +215,7 @@ var orders = {
                     db.run("UPDATE Command_Lines SET Amount = Amount + ? WHERE Id = ?", [req.body.amount, re[0].Id],
                       function(result, error) {
                         if(error == null && this.changes != 0) {
-                          res.status(200).json({message: "Successfully added command line"}).end();
+                          res.status(200).json({id: r[0].Id, message: "Successfully updated command line"}).end();
                         }
                         else {
                           res.status(500).json({error: "Unable to add line to command"}).end();
@@ -322,7 +239,7 @@ var orders = {
                       db.run("INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(?, ?, ?);",
                           [req.body.amount, this.lastID, req.body.product_id], function(error, result) {
                             if(error == null && this.changes != 0) {
-                              res.status(200).json({message: "Successfully added command line"}).end();
+                              res.status(200).json({id: this.lastID, message: "Successfully created command & added command line"}).end();
                             }else{
                               res.status(500).json({error: "Unable to add line to command"}).end();
                             }
@@ -361,7 +278,8 @@ var orders = {
     db.all("SELECT * FROM Commands WHERE Is_Paid = 0 and User_Id = ? ORDER BY Creation_Date DESC LIMIT 1",
     req.params.userId,
     function(e, r){
-      if(e == null){
+      console.log("getLastUnpaid:",e,r);
+      if(e == null && r.length != 0){
         db.all("select Command_Lines.Id as id, Amount as quantity, Name as name, Price as price \
         from Command_Lines, Products where Command_Id = ? \
         and Command_Lines.Product_Id = Products.Id",
