@@ -94,8 +94,8 @@ var orders = {
         // retrieve command lines comming with the command
         // lines non paginé
 
-        db.all("SELECT * FROM Command_Lines WHERE Command_Id = ? LIMIT ? OFFSET ?",
-        [req.params.id, pageSize, pageNumber*pageSize], function(error, result){
+        db.all("SELECT * FROM Command_Lines WHERE Command_Id = ?",
+        [req.params.id], function(error, result){
             if(error == null)
             {
               res.status(200).json({
