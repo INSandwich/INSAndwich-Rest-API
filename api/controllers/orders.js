@@ -94,10 +94,12 @@ var orders = {
         // retrieve command lines comming with the command
         // lines non paginé
 
-        db.all("SELECT * FROM Command_Lines WHERE Command_Id = ?",
+        db.all("SELECT Command_Lines.*, Products.Name FROM Command_Lines, Products WHERE Command_Id = ? AND Products.Id = Command_Lines.Id",
         [req.params.id], function(error, result){
+            //console.log(result);
             if(error == null)
             {
+
               res.status(200).json({
                 Id: r[0].Id,
                 lines : result
@@ -241,5 +243,7 @@ var orders = {
     });
   }
 }
+
+
 
 module.exports = orders;
