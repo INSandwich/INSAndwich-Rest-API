@@ -23,7 +23,7 @@ router.get('/users/login/:Login', users.getLogin);
 router.post('/users', users.create);
 router.put('/users/:id/role', users.updateUserRole);
 router.put('/users/:id/tokens', users.updateTokens);
-router.post('/users/:id/add', users.addTokens);
+router.put('/users/:id/add', users.addTokens);
 router.post('/users/:id/remove', users.removeTokens);
 router.post('/users/:id/update-passw', users.updatePassword);
 router.post('/users/:id/update-info', users.updateUserInfo);
