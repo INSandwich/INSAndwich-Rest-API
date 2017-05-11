@@ -258,7 +258,7 @@ var users = {
     var tokens = req.body.tokens;
 
     db.all("SELECT Tokens FROM Users WHERE id = ?", [req.params.id],
-      function(e, r){
+      function(e, r) {
         if(e == null && r.length != 0)
         {
           db.run("UPDATE Users SET Tokens = ? WHERE id = ?",
@@ -268,12 +268,12 @@ var users = {
               res.status(200).json({message: "Successfully added tokens"});
             }
             else {
-              res.status(500).json({message : "Error adding token to user : update error"});
+              res.status(500).json({error : "Ajout des tokens", detail:"Erreur lors de l'ajout des tokens à l'utilisateur."});
             }
           })
 
         } else {
-          res.status(500).json({message: "Error adding token to user : read error"});
+          res.status(500).json({error : "Ajout des tokens", detail:"Erreur lors de l'ajout des tokens à l'utilisateur."});
         }
       }
     )
