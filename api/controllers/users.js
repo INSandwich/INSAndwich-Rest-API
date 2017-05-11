@@ -81,7 +81,7 @@ var users = {
       function(e, r) {
         if(e == null && r.length != 0) {
           if(r[0].Password != password) { // Passwords don't match
-            res.status(500).json({error: "Error with Authentification", detail:"Login ou mot de passe incorrect."}).end();
+            res.status(500).json({error: "Error with Authentification", detail: "Login ou mot de passe incorrect."}).end();
           }
           else { // Passwords match, let's see if the user has an unpaid cmd
             db.all("SELECT * FROM Commands WHERE Is_Paid = 0 and User_Id = ? ORDER BY Creation_Date DESC LIMIT 1",
@@ -135,7 +135,7 @@ var users = {
           }
         }
         else {
-            res.status(500).json({error: "Error with Authentification", detail: e}).end();
+            res.status(500).json({error: "Error with Authentification", detail: "Login ou mot de passe incorrect."}).end();
         }
       }
     );
