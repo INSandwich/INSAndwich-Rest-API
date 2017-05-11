@@ -46,16 +46,16 @@ INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Va
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Triade de Triangles", "Le connu et reconnu triangle, repas des guerriers et des routiers.", 1, "https://media.meltyfood.fr/article-2201321-fb-f1399368689/les-raisons-scientifiques-du-sandwich-triangle.jpg", 1.5, 1);
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Bagel Carnivore", "Du bacon, du jambon de pays, du jambon cuit.", 1, "http://bigapplebagels.com/media/1032/menu-intro_deli-sandwich.png", 1.5, 1);
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
-INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
-INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
-INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
-INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
-INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
-INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
-INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
-INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
-INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
-INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Panini", "Un sandwich connu, grillé délicatement par nos soins. Voici un des sandwiches les plus convoités par les plus jeunes.", 1, "http://lba-inc.com/newsite/wp-content/uploads/2014/04/panini.jpg", 1.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("BLT", "Le sandwich BLT est un type de sandwich très populaire aux États-Unis. Il est composé traditionnellement de trois[réf. nécessaire] tranches de bacon, de feuilles de laitue (généralement iceberg ou romaine), et de tranches de tomate, d'où le nom BLT pour Bacon, Lettuce (laitue), Tomato (tomate).", 1, "https://www.dairyqueen.com/Global/DQBakes/FOOD_DQBakes_Turkey-BLT_940x500.png", 1.65, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Big Moc", "Big Mac (lancé dans la ville américaine de Pittsburgh en 1967 et dans tous les États-Unis en 1968) est une marque commerciale1 attachée à un hamburger commercialisé par McDonald’s, une chaîne de restauration rapide américaine étendue dans le monde. Il s’agit d'un des produits phares de l’enseigne. Il est composé de deux rondelles de 45,4 g de viande hachée de bœuf, de fromage américain, de « Sauce Spéciale » (une variante de la sauce Thousand Island Dressing), de laitue, de cornichons et d’oignons, le tout entre trois tranches de pain au sésame. Il est vendu dans 119 pays2.", 1, "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Big_Mac_hamburger_-_Croatia.jpg/290px-Big_Mac_hamburger_-_Croatia.jpg", 4.36, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Hot Diggidy Dog", "Un hot-dog est un type de sandwich composé d'un pain allongé (souvent brioché), grillé ou chauffé à la vapeur, fourré d’une saucisse cuite. On l’accompagne de moutarde, de ketchup, de relish, d’oignons, de choucroute ou de sauce mayonnaise. Partout, aux États-Unis, on retrouve un chili-dog (aussi nommé Coney Island hot dog ou simplement coney, dans la région de Détroit), garni de Sauce chili, oignons, et moutarde.", 1, "https://i.ytimg.com/vi/qtCQCgWqglo/maxresdefault.jpg", 1.85, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("PB & Jelly", "Le sandwich au beurre de cacahuète et à la confiture, connu dans les pays d'Amérique du Nord sous le nom de peanut butter and jelly sandwich, communément abrégé en PBJ, PB&J ou P&J, est un sandwich très populaire aux États-Unis et au Canada.", 1, "http://www.todayifoundout.com/wp-content/uploads/2014/02/peanut-butter-and-jelly.jpg", 1.05, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Calzone", "Le terme italien peut se traduire par « chausson » ; il s'agit en effet d'une pizza retournée fourrée généralement de mozzarella et de tomates, et avec du jambon (éventuellement). Les Italiens la consomment pendant les repas en antipasto (assortiment d'entrées), en plat de résistance ou en en-cas dans l'après-midi.", 1, "http://static.cuisineaz.com/680x357/i110270-recettes-calzone.jpg", 3.2, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Croque-Monsieur", "Un croque-monsieur ou croquemonsieur, appelé familièrement croque, est une sorte de sandwich chaud, au pain de mie, au jambon et au fromage (le plus souvent de l'emmental), grillé à la poêle, au four ou dans un appareil spécialisé.", 1, "http://img.cac.pmdstatic.net/fit/http.3A.2F.2Fwww.2Ecuisineactuelle.2Efr.2Fvar.2Fcui.2Fstorage.2Fimages.2Frecettes-de-cuisine.2Frecettes-pour-tous.2Fenfant.2Fcroque-monsieur-9768.2F121747-10-fre-FR.2Fcroque-monsieur.2Ejpg/1200x600/crop-from/center/croque-monsieur.jpg", 1.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Wrap", "Une wrap (du verbe anglais To wrap signifiant « envelopper ») ou roulé au Canada francophone est une sorte de sandwich fait d'une galette fine enroulée autour d'une garniture. Traditionnellement, les galettes sont des tortillas à base de farine de maïs (mais on les trouve plus facilement à base de blé), des lavash, ou des pita. La garniture se compose généralement de viande froide, de volaille en tranches, ou de poisson, accompagnée de laitue, de tomates en dés ou pico de gallo, de guacamole, de champignons sautés, de bacon, d'oignons grillés, de fromage, et d'une sauce (sauce tomate, mayonnaise, etc.)", 1, "http://www.earlofsandwich.fr/media/301334/buffalo-chicken-wrap.jpg", 2.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Burrito", "Un burrito est une préparation culinaire remontant à la fin du XIXe siècle originaire du Mexique. D'invention récente, le burrito n'est pas un plat de la cuisine traditionnelle mexicaine. Il se compose d'une tortilla de farine de blé garnie de divers ingrédients tels que de la viande de bœuf, des haricots, des tomates, des épices, du piment, de l'oignon, de la salade, etc. On ne frit pas la tortilla, elle ne sert que d'enveloppe à son contenu. S'il était frit, le burrito deviendrait une chimichanga.", 1, "https://tacobueno-live-iglusjax.stackpathdns.com/assets/food/burritos/Burrito_BOB_990x725.jpg", 4.5, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Taco Mexicain", "Un taco est un antojito (en-cas) de la cuisine mexicaine qui se compose d'une tortilla repliée ou enroulée sur elle-même contenant presque toujours une garniture, le plus souvent à base de viande et de sauce1.", 1, "http://www.tacotime.com/assets/images/menu/tacos/crisp-lg.png", 3.75, 1);
+INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Tramezzino", "Un tramezzino (diminutif de tramezzo, littéralement : « petit entre demi » en italien) est un en-cas italien composé de deux tranches de pain de mie triangulaires, renfermant une garniture de viande, fromage, champignons cuits, crudités, fruits de mer ou, plus rarement, poisson.", 1, "http://www.giallozafferano.it/images/ricette/20/2043/foto_hd/hd650x433_wm.jpg", 1.5, 1);
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Suedois", "Brrrrr, le grand froid, le saumon, les jolies blondes... Bref la suède quoi ! Et quoi de meilleur que leur sandwich suedois ?", 1, "http://www.patisseriepalanque.com/WebRoot/LaPoste2/Shops/box16474/4F29/9530/6F19/F58C/B967/0A0C/05EA/74B3/Isandwich_suedois_saumon.jpg", 2, 1);
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Churros", "Un vrai met de festival, venez apprecier nos churros faits avec amour...", 1, "https://smittenkitchendotcom.files.wordpress.com/2016/03/churros1.jpg", 1, 2);
 INSERT INTO Products(Name, Description, Available, Image, Price, Category_Id) Values("Crêpes", "Quand il fait froid, rien de tel qu'une bonne crêpe au nutella pour se réchauffer, et satisfaire ses papilles...", 1, "https://i.ytimg.com/vi/FRDMBhBKB7M/maxresdefault.jpg", 2, 2);
@@ -74,17 +74,18 @@ CREATE TABLE IF NOT EXISTS Commands(
   CONSTRAINT fk_user_id FOREIGN KEY (User_Id) REFERENCES Users(Id)
 );
 
-INSERT INTO Commands(User_id, Creation_Date) VALUES(1, "DDMMYYYY");
-INSERT INTO Commands(User_id, Creation_Date) VALUES(2, "DDMMYYYY");
-INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
-INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
-INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
-INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
-INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
-INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
-INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
-INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
-INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "DDMMYYYY");
+INSERT INTO Commands(User_id, Creation_Date) VALUES(1, "10/05/2017");
+INSERT INTO Commands(User_id, Creation_Date) VALUES(2, "11/05/2017");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "10/05/2017");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "9/05/2017");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "8/05/2017");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "7/05/2017");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "6/05/2017");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "5/05/2017");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "4/05/2017");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "3/05/2017");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "2/05/2017");
+INSERT INTO Commands(User_id, Is_Paid, Creation_Date) VALUES(2, 1, "2/05/2017");
 
 -- INSERT INTO Commands(User_id) VALUES(1);
 -- INSERT INTO Commands(User_id) VALUES(2);
@@ -112,7 +113,17 @@ INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(21, 3, 5);
 
 INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(12, 4, 5);
 INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(21, 5, 10);
-INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(12, 5, 12);
-INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(12, 4, 8);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(1, 5, 12);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(1, 4, 8);
+
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(1, 6, 8);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(1, 7, 9);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(1, 8, 3);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(1, 9, 4);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(1, 10, 10);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(1, 11, 7);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(1, 12, 7);
+INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(8, 12, 8);
+
 
 COMMIT;
