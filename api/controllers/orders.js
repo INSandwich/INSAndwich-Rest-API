@@ -103,7 +103,6 @@ var orders = {
         db.all("SELECT Command_Lines.*, Products.Name, Products.Price FROM Command_Lines,\
               Products WHERE Command_Id = ? AND Products.Id = Command_Lines.Product_Id",
         [req.params.id], function(error, result){
-            console.log(result);
 
             for (i = 0; i < result.length; i++) {
                 totalPrice = totalPrice + (parseFloat(result[i].Amount)*parseFloat(result[i].Price));
@@ -155,7 +154,6 @@ var orders = {
               if(err == null && this.changes != 0){
                 res.status(200).json({message: "Deletion completed successfully"}).end();
               }else {
-                console.log("her");
                 res.status(200).json({error: err}).end();
               }
             });
@@ -169,7 +167,6 @@ var orders = {
     // retrieve a command line
     db.all("SELECT * FROM Command_Lines WHERE Id = ?", req.params.id, function(e, r){
       if(e == null && r[0] != null){
-        console.log(r);
         res.status(200).json(r[0]).end();
       }else{
         res.status(500).json({error: "Unable to get command line"}).end();
@@ -189,7 +186,6 @@ var orders = {
     // First we must see if the user has a last paid command
     db.all("SELECT * FROM Commands WHERE User_Id = ? AND Is_Paid = 0", [req.body.user_id],
       function (e, r) {
-        console.log(r, e);
         if (e == null) {
           if(r.length != 0) { // The user has an unpaid command -> Check
             // Does the command already have a product associated to it?
@@ -231,7 +227,6 @@ var orders = {
           else { // The user doesn't have an unpaid command -> create it and insert the line
               db.run("INSERT INTO Commands (User_id, Creation_Date) VALUES (?, ?);",
                   [req.body.user_id, date.toISOString()], function(er, re){
-                    console.log(re, this);
                     if(er == null && this.changes != 0)
                     {
                       db.run("INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(?, ?, ?);",
@@ -257,12 +252,10 @@ var orders = {
   },
 
   getLastUnpaid: function(req, res){
-    console.log(req.params);
     // retrieve last unpaid command with sum of items and total price
     db.all("SELECT * FROM Commands WHERE Is_Paid = 0 and User_Id = ? ORDER BY Creation_Date DESC LIMIT 1",
     req.params.userId,
     function(e, r){
-      console.log("getLastUnpaid:",e,r);
       if(e == null && r.length != 0){
         db.all("select Command_Lines.Id as id, Amount as quantity, Name as name, Price as price \
         from Command_Lines, Products where Command_Id = ? \
@@ -327,7 +320,7 @@ var orders = {
 
   checkout: function(req, res) {
     //PARAMS : [req.body.command_id, req.body.user_id, req.body.userTokens, req.body.commandTotal]
-    console.log(req.body, res);
+    // console.log(req.body, res);
     if(req.body.userTokens >= req.body.commandTotal) {
       db.run("UPDATE Commands SET Is_Paid = 1 WHERE Id = ?", [req.body.command_id], function(err, resu) {
         if(err == null && this.changes != null) {
@@ -337,7 +330,8 @@ var orders = {
           res.status(500).json({error: "Error Checking Out", detail: err}).end();
         }
       });
-      db.run("UPDATE Users SET Tokens = Tokens - ? WHERE Id = ?", [req.body.userTokens, req.body.user_id], function(err, resu) {
+      db.run("UPDATE Users SET Tokens = Tokens - ? WHERE Id = ?", [req.body.commandTotal, req.body.user_id], function(err, resu) {
+        console.log(req.body, this);
         if(err != null && this.changes == null) {
           res.status(500).json({error: "Error Checking Out", detail: err}).end();
         }
