@@ -208,6 +208,7 @@ var orders = {
                       );
                   }
                   else { // we just update the re[0].amount
+
                     db.run("UPDATE Command_Lines SET Amount = Amount + ? WHERE Id = ?", [req.body.amount, re[0].Id],
                       function(result, error) {
                         if(error == null && this.changes != 0) {
@@ -227,6 +228,7 @@ var orders = {
             );
           }
           else { // The user doesn't have an unpaid command -> create it and insert the line
+          console.log("The user doesn't have an unpaid command -> create it and insert the line");
               db.run("INSERT INTO Commands (User_id, Creation_Date) VALUES (?, ?);",
                   [req.body.user_id, date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()], function(er, re){
                     if(er == null && this.changes != 0)
@@ -269,7 +271,7 @@ var orders = {
             db.all("select sum(Amount) as total, sum(Amount * Price) as totalPrice from Command_Lines, Products where Command_Lines.Command_Id = ? and Products.Id = Command_Lines.Product_Id;",
             r[0].Id, function(e_fckcbacks, r_fckcbacks){
               if(e_fckcbacks == null){
-                console.log(r_fckcbacks);
+                //console.log(r_fckcbacks);
                 // eventually render json (ouf!)
                 res.status(200).json({
                   Id:r[0].Id,
