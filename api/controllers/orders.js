@@ -133,7 +133,9 @@ var orders = {
     // add a new command to the database
     // requires user id
     var date = new Date();
-    db.run("INSERT INTO Commands(User_id, Creation_Date) VALUES(?, ?);", req.params.id, date.toISOString(), function(e, r){
+    var formattedDate = date.toLocaleDateString();
+    console.log(formattedDate);
+    db.run("INSERT INTO Commands(User_id, Creation_Date) VALUES(?, ?);", req.params.id, formattedDate, function(e, r){
       if(e == null && this.changes != 0)
       {
         res.status(200).json({message: "Command insertion successfull"}).end();
@@ -226,7 +228,7 @@ var orders = {
           }
           else { // The user doesn't have an unpaid command -> create it and insert the line
               db.run("INSERT INTO Commands (User_id, Creation_Date) VALUES (?, ?);",
-                  [req.body.user_id, date.toISOString()], function(er, re){
+                  [req.body.user_id, date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()], function(er, re){
                     if(er == null && this.changes != 0)
                     {
                       db.run("INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(?, ?, ?);",
