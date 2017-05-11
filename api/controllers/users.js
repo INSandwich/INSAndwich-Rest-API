@@ -264,10 +264,12 @@ var users = {
           db.run("UPDATE Users SET Tokens = ? WHERE id = ?",
           [req.body.tokens + r[0].Tokens, req.params.id],
           function(error, result){
-            if(error == null)
-            res.status(200).json({message: "Successfully added tokens"});
-            else
-            res.status(500).json({message : "Error adding token to user : update error"})
+            if(error == null) {
+              res.status(200).json({message: "Successfully added tokens"});
+            }
+            else {
+              res.status(500).json({message : "Error adding token to user : update error"});
+            }
           })
 
         } else {
