@@ -101,11 +101,9 @@ var orders = {
         // retrieve command lines comming with the command
         // lines non paginé
         db.all("SELECT Command_Lines.*, Products.Name, Products.Price FROM Command_Lines,\
-              Products WHERE Command_Id = ? AND Products.Id = Command_Lines.Id",
+              Products WHERE Command_Id = ? AND Products.Id = Command_Lines.Product_Id",
         [req.params.id], function(error, result){
-            console.log(result.length);
-            console.log(result[0]);
-            console.log(result[2]);
+            console.log(result);
 
             for (i = 0; i < result.length; i++) {
                 totalPrice = totalPrice + (parseFloat(result[i].Amount)*parseFloat(result[i].Price));
@@ -256,20 +254,6 @@ var orders = {
           }
         }
       );
-    // If not -> Create a new command
-
-    // Then add the data to the command, or update a line with the amount if the product ids correspond
-
-    /*db.run("INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(?, ?, ?);",
-    [req.body.amount, commandId, req.body.product_id],
-    function(e, r){
-      if(e == null && this.changes != 0){
-        res.status(200).json({message: "Successfully added command line"}).end();
-      }else{
-        console.log(e);
-        res.status(500).json({error: "Unable to add line to command"}).end();
-      }
-    });*/
   },
 
   getLastUnpaid: function(req, res){
@@ -339,7 +323,31 @@ var orders = {
         res.status(500).json({error: "Unable to delete command line"}).end();
       }
     });
+  },
+
+  checkout: function(req, res) {
+    //PARAMS : [req.body.command_id, req.body.user_id, req.body.userTokens, req.body.commandTotal]
+    console.log(req.body, res);
+    if(req.body.userTokens >= req.body.commandTotal) {
+      db.run("UPDATE Commands SET Is_Paid = 1 WHERE Id = ?", [req.body.command_id], function(err, resu) {
+        if(err == null && this.changes != null) {
+          res.status(200).json({message: "Commande effectuée avec succès."}).end();
+        }
+        else {
+          res.status(500).json({error: "Error Checking Out", detail: err}).end();
+        }
+      });
+      db.run("UPDATE Users SET Tokens = Tokens - ? WHERE Id = ?", [req.body.userTokens, req.body.user_id], function(err, resu) {
+        if(err != null && this.changes == null) {
+          res.status(500).json({error: "Error Checking Out", detail: err}).end();
+        }
+      });
+    }
+    else {
+      res.status(500).json({error: "Error Checking Out", detail: "Pas assez de tokens pour payer cette commande."}).end();
+    }
   }
+
 }
 
 

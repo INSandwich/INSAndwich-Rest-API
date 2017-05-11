@@ -77,104 +77,69 @@ var users = {
     var Usid;
     var lastOrderId;
 
-
     db.all("SELECT Password, Role, Id FROM Users WHERE Login LIKE ?", req.body.login,
       function(e, r) {
-        if(e == null){
-          Usid = parseInt(r[0].Id);
-          //555555555555555555555555555555555555555555555//
-          db.all("SELECT * FROM Commands WHERE Is_Paid = 0 and User_Id = ? ORDER BY Creation_Date DESC LIMIT 1",
-          Usid,
-          function(er, re){
-            //44444444444444444444444444444444444444444444//
-            if(er == null){
-              //3333333333333333333333333333333333333333333//
-              if(re != null){
-              //console.log("RE : ", re);
-
-              //22222222222222222222222222222222222222222222//
-              db.all("select Command_Lines.Id as id, Amount as quantity, Name as name \
-              from Command_Lines, Products where Command_Id = ? \
-              and Command_Lines.Product_Id = Products.Id",
-              re[0].Id,
-              function(error, result){
-                if(error == null){
-                  // get total itemcount and price
-                  //11111111111111111111111111111111111111111//
-                  db.all("select sum(Amount) as total from Command_Lines, Products where Command_Lines.Command_Id = ? and Products.Id = Command_Lines.Product_Id;",
-                  re[0].Id, function(e_fckcbacks, r_fckcbacks){
-                    if(e_fckcbacks == null){
-                      lastOrderId = re[0].Id;
-                      cartSize = r_fckcbacks[0].total;
-                      if(r.length != 0) {
-                        if(password == r[0].Password){
-                          res.status(200).json({
-                             message: "Successfully logged in",
-                             token : tokstring,
-                             login : login,
-                             role : r[0].Role,
-                             id : Usid,
-                             cartSize : cartSize,
-                             lastOrderId : lastOrderId
-                          }).end();
-
-                        }else{
-                          res.status(500).json({ error: "Authentification error", detail: "Login ou mot de passe incorrect."}).end()
+        if(e == null && r.length != 0) {
+          if(r[0].Password != password) { // Passwords don't match
+            res.status(500).json({error: "Error with Authentification", detail:"Login ou mot de passe incorrect."}).end();
+          }
+          else { // Passwords match, let's see if the user has an unpaid cmd
+            db.all("SELECT * FROM Commands WHERE Is_Paid = 0 and User_Id = ? ORDER BY Creation_Date DESC LIMIT 1",
+              r[0].Id, function(er, re) {
+                if(er == null) {
+                  if(re.length != 0) { // The user has a last paid command
+                    db.all("select Command_Lines.Id as id, Amount as quantity, Name as name \
+                    from Command_Lines, Products where Command_Id = ? \
+                    and Command_Lines.Product_Id = Products.Id",
+                      re[0].Id, function(error, result) {
+                        if(error == null && result.length != 0) { // Sum commands
+                          db.all("select sum(Amount) as total from Command_Lines, Products where Command_Lines.Command_Id = ? and Products.Id = Command_Lines.Product_Id;",
+                            re[0].Id, function(e_fckcbacks, r_fckcbacks){
+                              if(e_fckcbacks == null && r_fckcbacks.length != 0) {
+                                res.status(200).json({
+                                   message: "Successfully logged in",
+                                   token : tokstring,
+                                   login : login,
+                                   role : r[0].Role,
+                                   id : parseInt(r[0].Id),
+                                   cartSize : r_fckcbacks[0].total,
+                                   lastOrderId : re[0].Id
+                                }).end();
+                              }
+                            }
+                          );
                         }
-                     }else if(r.length == 0){
-                       //res.setHeader('Access-Control-Allow-Origin','*');
-                       res.status(500).json({ error: "Error retrieving user.", detail: "Login ou mot de passe incorrect." }).end();
-                     }else{
-                       res.status(500).json({ error: "Error : blank request.", detail: e }).end();
-                     }
-                  }else{
-                    res.status(500).json({error: "Unable to retrieve total price and item count"}).end();
+                        else {
+                          res.status(500).json({error: "Error with Authentification", detail: error});
+                        }
+                      }
+                    );
                   }
-                })
-                //11111111111111111111111111111111111111111//
-                }else{
-                  console.log(error);
-                  res.status(500).json({error: "Unable to get last unpaid command's lines"}).end();
-                }
-              });
-              //2222222222222222222222222222222222222222222//
-            }else{
-              if(r.length != 0) {
-                if(password == r[0].Password){
+                  else { // The user doesn't have a last paid command (return 0 for lastOrderId && cartSize)
                     res.status(200).json({
                      message: "Successfully logged in",
                      token : tokstring,
                      login : login,
                      role : r[0].Role,
-                     id : Usid,
+                     id : parseInt(r[0].Id),
                      cartSize : 0,
                      lastOrderId : 0
-                   }).end();
-
-                }else{
-                  res.status(500).json({ error: "Authentification error", detail: "Login ou mot de passe incorrect."}).end()
+                    }).end();
+                  }
                 }
-              }else if (r.length == 0){
-                  //res.setHeader('Access-Control-Allow-Origin','*');
-                  res.status(500).json({ error: "Error retrieving user.", detail: "Login ou mot de passe incorrect." }).end();
-              }else{
-                  res.status(500).json({ error: "Error : blank request.", detail: e }).end();
+                else {
+                  res.status(500).json({error: "Error with Authentification", detail: er}).end();
+                }
               }
+            );
           }
-          //3333333333333333333333333333333333333333333//
-
-        }else{
-          console.log(error);
-          res.status(500).json({error: "Unable to get last unpaid command's lines"}).end();
         }
-        //44444444444444444444444444444444444444444444//
-      });
-      //55555555555555555555555555555555555555555555//
-            }else{
-              console.log("Erreur :", er);
-              res.status(500).json({error: "Unable to get last unpaid command for given user id"}).end();
-            }
-        });
+        else {
+            res.status(500).json({error: "Error with Authentification", detail: e}).end();
+        }
+      }
+    );
+
   },
 
   // Retrieve an user by its ID
