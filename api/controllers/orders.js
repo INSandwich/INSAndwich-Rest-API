@@ -76,7 +76,7 @@ var orders = {
       from Commands, Command_Lines, Products\
       where Commands.Id = Command_Lines.Command_Id and Commands.User_Id = ?\
       and Command_Lines.Product_Id = Products.Id and Commands.Is_Paid != 0 group by Command_Lines.Command_Id\
-      ORDER BY Commands.Id\
+      ORDER BY Commands.Id DESC\
       LIMIT ? OFFSET ?;",
       req.params.id,pageSize, pageNumber*pageSize,
       function(e, r){
@@ -344,7 +344,7 @@ var orders = {
           res.status(500).json({error: "Paiement", detail: err}).end();
         }
       });
-      db.run("UPDATE Users SET Tokens = Tokens - ? WHERE Id = ?", [req.body.commandTotal, req.body.user_id], function(err, resu) {
+      db.run("UPDATE Users SET Tokens = Tokens - ? WHERE Id = ?", [req.body.commandTotal.toFixed(2), req.body.user_id], function(err, resu) {
         //console.log(req.body, this);
         if(err != null && this.changes == null) {
           res.status(500).json({error: "Paiement", detail: err}).end();
