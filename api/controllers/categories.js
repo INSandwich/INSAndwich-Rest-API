@@ -24,10 +24,10 @@ var categories = {
           });
       }
       else if (r.length == 0) {
-        res.status(500).json({ error: "Error retrieving categories.", detail: "No categories in the database."}).end();
+        res.status(500).json({ error: "Récuperation des catégories", detail: "Aucune catégories dans la base de données."}).end();
       }
       else {
-        res.status(500).json({ error: "Error retrieving categories.", detail: e }).end();
+        res.status(500).json({ error: "Récuperation des catégories", detail: "Impossible de récuperer les catégories." }).end();
       }
     });
   },
@@ -40,10 +40,10 @@ var categories = {
           res.status(200).json(r);
         }
         else if (r.length == 0) {
-          res.status(500).json({ error: "Error retrieving category.", detail: "No category with this Id."}).end();
+          res.status(500).json({ error: "Récuperation d'une catégorie", detail: "Impossible de récuperer la catégorie correspondante à cet Id."}).end();
         }
         else {
-          res.status(500).json({ error: "Error retrieving category.", detail: e }).end();
+          res.status(500).json({ error: "Récuperation d'une catégorie", detail: e }).end();
         }
     });
   },
@@ -59,7 +59,7 @@ var categories = {
         });
       }
       else {
-        res.status(500).json({ error: "Error creating category.", detail: e }).end();
+        res.status(500).json({ error: "Création d'une catégorie", detail: e }).end();
       }
     });
   },
@@ -71,7 +71,7 @@ var categories = {
         res.status(200).json({ message: "Successfully updated category" });
       }
       else {
-        res.status(500).json({ error: "Error updating category.", detail: e }).end();
+        res.status(500).json({ error: "Edition d'une catégorie", detail: e }).end();
       }
     });
   },
@@ -86,7 +86,7 @@ var categories = {
           });
         }
         else {
-          res.status(500).json({ error: "Error deleting category.", detail: e }).end();
+          res.status(500).json({ error: "Suppression d'une catégorie", detail: e }).end();
         }
       });
   }

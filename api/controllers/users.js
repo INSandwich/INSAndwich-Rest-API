@@ -21,19 +21,19 @@ var users = {
     }
 
     db.all("SELECT COUNT(*) as count from Users WHERE Login LIKE ?", [login],
-    function(e, r){
-      if((r.length !=0) && ( e == null)){
-        itemCount = r[0].count;
+      function(e, r){
+        if((r.length !=0) && ( e == null)){
+          itemCount = r[0].count;
 
-        pageCount = roundUp(itemCount/pageSize,1);
-        //console.log("UsersCount = ",pageCount);
-      }else if(r.length == 0){
-        res.status(500).json({error: "Couldn't get Users count", detail: "No Users retrieved."}).end();
-      }else{
-        res.status(500).json({error: "Couldn't get Users count", detail: e}).end();
+          pageCount = roundUp(itemCount/pageSize,1);
+          //console.log("UsersCount = ",pageCount);
+        }else if(r.length == 0){
+          res.status(500).json({error: "Récuperation des Utilisateurs", detail: "Aucun utilisateur dans la base de données."}).end();
+        }else{
+          res.status(500).json({error: "Récuperation des Utilisateurs", detail: e}).end();
+        }
       }
-    }
-    )
+    );
 
     db.all("SELECT * FROM Users WHERE Login LIKE ? LIMIT ? OFFSET ?", [login ,pageSize, pageNumber*pageSize],
       function(e, r) {
@@ -47,10 +47,10 @@ var users = {
           });
         }
         else if (r.length == 0) {
-          res.status(500).json({ error: "Error retrieving users.", detail: "No users in the database." }).end();
+          res.status(500).json({ error: "Récuperation des Utilisateurs", detail: "Aucune utilisateur dans la base de données." }).end();
         }
         else {
-          res.status(500).json({ error: "Error retrieving users.", detail: e }).end();
+          res.status(500).json({ error: "Récuperation des Utilisateurs", detail: e }).end();
         }
       });
   },
@@ -81,7 +81,7 @@ var users = {
       function(e, r) {
         if(e == null && r.length != 0) {
           if(r[0].Password != password) { // Passwords don't match
-            res.status(500).json({error: "Error with Authentification", detail: "Login ou mot de passe incorrect."}).end();
+            res.status(500).json({error: "Authentification", detail: "Login ou mot de passe incorrect."}).end();
           }
           else { // Passwords match, let's see if the user has an unpaid cmd
             db.all("SELECT * FROM Commands WHERE Is_Paid = 0 and User_Id = ? ORDER BY Creation_Date DESC LIMIT 1",
@@ -104,13 +104,13 @@ var users = {
                                    id : parseInt(r[0].Id),
                                    cartSize : r_fckcbacks[0].total,
                                    lastOrderId : re[0].Id
-                                }).end();
+                                });
                               }
                             }
                           );
                         }
                         else {
-                          res.status(500).json({error: "Error with Authentification", detail: error});
+                          res.status(500).json({error: "Authentification", detail: error}).end();
                         }
                       }
                     );
@@ -124,18 +124,18 @@ var users = {
                      id : parseInt(r[0].Id),
                      cartSize : 0,
                      lastOrderId : 0
-                    }).end();
+                    });
                   }
                 }
                 else {
-                  res.status(500).json({error: "Error with Authentification", detail: er}).end();
+                  res.status(500).json({error: "Authentification", detail: er}).end();
                 }
               }
             );
           }
         }
         else {
-            res.status(500).json({error: "Error with Authentification", detail: "Login ou mot de passe incorrect."}).end();
+            res.status(500).json({error: "Authentification", detail: "Login ou mot de passe incorrect."}).end();
         }
       }
     );
@@ -147,13 +147,13 @@ var users = {
     db.all("SELECT * FROM Users WHERE Id = ?", req.params.id,
       function(e, r) {
         if( (e == null) && (r.length != 0) ) {
-          res.status(200).json(r).end();
+          res.status(200).json(r);
         }
         else if (r.length == 0) {
-          res.status(500).json({ error: "Error retrieving user.", detail: "No user with this Id." }).end();
+          res.status(500).json({ error: "Récuperation d'un Utilisateur", detail: "Aucun utilisateur correspondant à cet Id dans la base de données." }).end();
         }
         else {
-          res.status(500).json({ error: "Error retrieving user.", detail: e }).end();
+          res.status(500).json({ error: "Récuperation d'un Utilisateur", detail: e }).end();
         }
       }
     )
@@ -169,10 +169,10 @@ var users = {
           res.status(200).json(r);
         }
         else if (r.length == 0) {
-          res.status(500).json({ error: "Error retrieving user.", detail: "No user with this login."}).end();
+          res.status(500).json({ error: "Récuperation d'un Utilisateur", detail: "Aucun utilisateur avec cet identifiant dans la base de données."}).end();
         }
         else {
-          res.status(500).json({ error: "Error retrieving user.", detail: e }).end();
+          res.status(500).json({ error: "Récuperation d'un Utilisateur", detail: e }).end();
         }
       }
     )
@@ -188,7 +188,7 @@ var users = {
 
             var email = req.body.email;
             if(!(IsEmail.validate(email))) {
-              res.status(500).json({error: "Please provide a correct email."}).end();
+              res.status(500).json({error: "Création du Compte", detail: "Email non valide."}).end();
             }
 
             db.run("INSERT INTO Users (FirstName, LastName, Email, Login, Password, Adresse) VALUES (?, ?, ?, ?, ?, ?)",
@@ -206,7 +206,7 @@ var users = {
                 });
               }
               else {
-                res.status(500).json({ error: "Error creating user.", detail: e }).end();
+                res.status(500).json({ error: "Création du Compte", detail: e }).end();
               }
         });
         //res.status(500).json({error: "Hash failed, please provide a password."}).end();
@@ -226,7 +226,7 @@ var users = {
           res.status(200).json({ message: "Successfully updated user role" });
         }
         else {
-          res.status(500).json({error: "Error updating user role.", detail: e}).end();
+          res.status(500).json({error: "Mise à jour d'un Utilisateur", detail: e}).end();
         }
       }
     );
@@ -243,13 +243,13 @@ var users = {
             res.status(200).json({ message: "Successfully updated token amount."});
           }
           else {
-            res.status(500).json({error: "Error updating token amount.", detail: e}).end();
+            res.status(500).json({error: "Mise à jour d'un Utilisateur", detail: e}).end();
           }
         }
       );
     }
     else {
-      res.status(500).json({ "error": "Token value must be positive."}).end();
+      res.status(500).json({ error: "Mise à jour d'un Utilisateur", detail: "Le nombre de tokens doit être positif."}).end();
     }
 
   },
@@ -268,12 +268,12 @@ var users = {
               res.status(200).json({message: "Successfully added tokens"});
             }
             else {
-              res.status(500).json({error : "Ajout des tokens", detail:"Erreur lors de l'ajout des tokens à l'utilisateur."});
+              res.status(500).json({error : "Ajout des tokens", detail:"Erreur lors de l'ajout des tokens à l'utilisateur."}).end();
             }
           })
 
         } else {
-          res.status(500).json({error : "Ajout des tokens", detail:"Erreur lors de l'ajout des tokens à l'utilisateur."});
+          res.status(500).json({error : "Ajout des tokens", detail:"Erreur lors de l'ajout des tokens à l'utilisateur."}).end();
         }
       }
     )
@@ -291,17 +291,19 @@ var users = {
             db.run("UPDATE Users SET Tokens = ? WHERE id = ?",
             [r[0].Tokens - req.body.tokens, req.params.id],
             function(error, result){
-              if(error == null)
-              res.status(200).json({message: "Successfully removed tokens"});
-              else
-              res.status(500).json({message : "Error removing token to user : update error"});
+              if(error == null) {
+                res.status(200).json({message: "Successfully removed tokens"});
+              }
+              else {
+                res.status(500).json({error : "Mise à jour d'un Utilisateur", detail: "Erreur lors de l'enlevement de tokens."}).end();
+              }
             })
           } else {
-            res.status(500).json({message : "Error : insufficient tokens"});
+            res.status(500).json({error : "Mise à jour d'un Utilisateur", detail: "Pas assez de tokens."}).end();
           }
 
         } else {
-          res.status(500).json({message: "Error removing token to user : read error"});
+          res.status(500).json({error: "Recupération d'un Utilisateur", detail: "Aucun utilisateur correspondant à cet Id dans la base de données."}).end();
         }
       }
     )
@@ -328,20 +330,20 @@ var users = {
                   res.status(200).json({ message: "Successfully updated user password" });
                 }
                 else {
-                  res.status(500).json({error: "Error updating user password.", detail: e}).end();
+                  res.status(500).json({error: "Mise à jour du mot de passe", detail: e}).end();
                 }
               }
             );
 
           } else {
-            res.status(500).json({error: "Error updating user password", detail: "Ancien mot de passe non valide."}).end();
+            res.status(500).json({error: "Mise à jour du mot de passe", detail: "Ancien mot de passe non valide."}).end();
           }
         }
         else if (r.length == 0) {
-          res.status(500).json({ error: "Error retrieving old password.", detail: "No user with this Id." }).end();
+          res.status(500).json({ error: "Mise à jour du mot de passe", detail: "Aucun utilisateur avec cet Id dans la base de données." }).end();
         }
         else {
-          res.status(500).json({ error: "Error retrieving old password.", detail: e }).end();
+          res.status(500).json({ error: "Mise à jour du mot de passe", detail: e }).end();
         }
       }
     )
@@ -379,11 +381,11 @@ var users = {
           });
         }
         else {
-          res.status(500).json({ error: "Error updating user.", detail: e }).end();
+          res.status(500).json({ error: "Mise à jour d'un Utilisateur", detail: e }).end();
         }
       });
     }else{
-      res.status(500).json({error: "Error updating user", detail: "Please fill every field."}).end();
+      res.status(500).json({error: "Mise à jour d'un Utilisateur", detail: "Veuillez remplir tous les champs"}).end();
     }
 
 
@@ -399,9 +401,10 @@ var users = {
           });
         }
         else {
-          res.status(500).json({ error: "Error deleting user.", detail: e }).end();
+          res.status(500).json({ error: "Suppression d'un Utilisateur", detail: e }).end();
         }
       });
   }
 }
+
 module.exports = users;

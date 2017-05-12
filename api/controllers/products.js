@@ -28,9 +28,9 @@ var products = {
           pageCount = roundUp(itemCount/pageSize,1);
           //console.log("PageCount = ",pageCount);
         }else if(r.length == 0){
-          res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
+          res.status(500).json({error: "Recuperation des Produits", detail: "Aucun produits dans la base de données."}).end();
         }else{
-          res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+          res.status(500).json({error: "Recuperation des Produits", detail: e}).end();
         }
       }
     );
@@ -48,10 +48,10 @@ var products = {
         });
       }
       else if (r.length == 0) {
-        res.status(500).json({error: "Couldn't get products", detail: "No products retrieved."}).end();
+        res.status(500).json({error: "Recuperation des Produits", detail: "Aucun produits dans la base de données."}).end();
       }
       else {
-        res.status(500).json({error: "Couldn't get products", detail: e}).end();
+        res.status(500).json({error: "Recuperation des Produits", detail: e}).end();
       }
     }
     )
@@ -62,9 +62,12 @@ var products = {
     function(e, r){
       if(r.length != 0 && e == null){
         //res.setHeader('Access-Control-Allow-Origin','*');
-        res.status(200).json({item : r})
-      } else {
-        res.status(500).json({error : "Couldn't get product", detail : e}).end();
+        res.status(200).json({item : r});
+      } else if (r.length == 0) {
+        res.status(500).json({error: "Recuperation d'un Produit", detail: "Aucun produit correspondant à cet Id dans la base de données."}).end();
+      }
+      else {
+        res.status(500).json({error : "Recuperation d'un Produit", detail : e}).end();
       }
     }
     )
@@ -89,9 +92,9 @@ var products = {
           pageCount = roundUp(itemCount/pageSize,1);
           //console.log("PageCount = ",pageCount);
         }else if(r.length == 0){
-          res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
+          res.status(500).json({error: "Recuperation des Produits", detail: "Aucun produits dans la base de données."}).end();
         }else{
-          res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+          res.status(500).json({error: "Recuperation des Produits", detail: e}).end();
         }
       }
     );
@@ -108,10 +111,10 @@ var products = {
           });
         }
         else if (r.length == 0) {
-          res.status(500).json({error: "Couldn't get products", detail: "No products retrieved."}).end();
+          res.status(500).json({error: "Recuperation des Produits", detail: "Aucun produits dans la base de données."}).end();
         }
         else {
-          res.status(500).json({error: "Couldn't get products", detail: e}).end();
+          res.status(500).json({error: "Recuperation des Produits", detail: e}).end();
         }
       }
     );
@@ -124,7 +127,7 @@ var products = {
 
     if(req.body.name == null || req.body.image == null || req.body.price == null || req.body.category == null)
     {
-      res.status(500).json({error : "Missing critical data"});
+      res.status(500).json({error : "Création d'un Produit", detail: "Absence de données importantes."}).end();
     } else {
       // init default values for non critical data if not submitted
       if(req.body.description != null)
@@ -137,7 +140,7 @@ var products = {
       [req.body.name, description, available, req.body.image, req.body.price, req.body.category],
       function(e, r){
         if(e == null && this.changes != 0){
-          res.setHeader('Access-Control-Allow-Origin','*');
+          //res.setHeader('Access-Control-Allow-Origin','*');
           res.status(200).json({
             Id : Number(this.lastID),
             Name : req.body.name,
@@ -148,7 +151,7 @@ var products = {
             Category: req.body.category
           });
         } else {
-          res.status(500).json({error : "Could not add product in database"}).end();
+          res.status(500).json({error : "Création d'un Produit", detail: e}).end();
         }
       }
       );
@@ -175,7 +178,7 @@ var products = {
         });
       }
       else {
-        res.status(500).json({ error: "Error updating product.", detail: e }).end();
+        res.status(500).json({ error: "Modification d'un Produit", detail: e }).end();
       }
     }
     )
@@ -190,7 +193,7 @@ var products = {
           });
         }
         else {
-          res.status(500).json({ error: "Error deleting product.", detail: e }).end();
+          res.status(500).json({ error: "Suppression d'un Produit", detail: e }).end();
         }
       });
   },

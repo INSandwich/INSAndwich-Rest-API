@@ -23,9 +23,9 @@ var orders = {
           pageCount = roundUp(itemCount/pageSize,1);
           //console.log("PageCount = ",pageCount);
         }else if(r.length == 0){
-          res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
+          res.status(500).json({error: "Récuperation des commandes", detail: "Erreur de récuperation des commandes."}).end();
         }else{
-          res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+          res.status(500).json({error: "Récuperation des commandes", detail: e}).end();
         }
       }
     );
@@ -38,9 +38,9 @@ var orders = {
            pageNumber: parseInt(pageNumber),
            pageCnt: parseInt(pageCount),
            items: r
-         }).end();
+         });
        } else {
-         res.status(500).json({error: "Unable to get commands"}).end();
+         res.status(500).json({error: "Récuperation des commandes", detail: e}).end();
        }
     });
   },
@@ -63,9 +63,9 @@ var orders = {
             //console.log("PageCount = ",pageCount);
 
           }else if(r.length == 0){
-            res.status(500).json({error: "Couldn't get Items count", detail: "No items retrieved."}).end();
+            res.status(500).json({error: "Récuperation des commandes", detail: "Erreur de récuperation des commandes."}).end();
           }else{
-            res.status(500).json({error: "Couldn't get Items count", detail: e}).end();
+            res.status(500).json({error: "Récuperation des commandes", detail: e}).end();
           }
         }
       );
@@ -87,9 +87,9 @@ var orders = {
             pageNumber: parseInt(pageNumber),
             pageCnt: parseInt(pageCount),
             items: r
-          }).end();
+          });
         }else {
-          res.status(500).json({error: "Unable to get commands"}).end();
+          res.status(500).json({error: "Récuperation des commandes", detail: e}).end();
         }
       });
     });
@@ -116,7 +116,7 @@ var orders = {
                 //console.log("TotalPrice", totalPrice);
             }
 
-            if(error == null)
+            if(error == null && result.length != 0)
             {
 
               res.status(200).json({
@@ -127,11 +127,14 @@ var orders = {
               });
             } else {
               //console.log(error);
-              res.status(500).json({error : "Unable to get command's lines"});
+              res.status(500).json({error : "Récuperation d'une commande", detail: error});
             }
         });
-      } else {
-        res.status(500).json({error : "Unable to get command"});
+      } else if (r.length == 0) {
+        res.status(500).json({error : "Récuperation d'une commande", detail: "Aucune commande correspondante à cet Id dans la base de données."});
+      }
+      else {
+        res.status(500).json({error : "Récuperation d'une commande", detail: e});
       }
     })
   },
@@ -145,9 +148,9 @@ var orders = {
     db.run("INSERT INTO Commands(User_id, Creation_Date) VALUES(?, ?);", req.params.id, formattedDate, function(e, r){
       if(e == null && this.changes != 0)
       {
-        res.status(200).json({message: "Command insertion successfull"}).end();
+        res.status(200).json({message: "Command insertion successfull"});
       } else {
-        res.status(500).json({error: "Couldn't insert command into database"}).end();
+        res.status(500).json({error: "Création d'une commande", detail: e}).end();
       }
     });
   },
@@ -161,13 +164,13 @@ var orders = {
             db.run("delete from Command_Lines where Command_Lines.Command_Id = ?", req.params.id,
             function(err, result){
               if(err == null && this.changes != 0){
-                res.status(200).json({message: "Deletion completed successfully"}).end();
+                res.status(200).json({message: "Deletion completed successfully"});
               }else {
-                res.status(200).json({error: err}).end();
+                res.status(200).json({error: "Suppression d'une commande", detail: err}).end();
               }
             });
           }else {
-            res.status(500).json({error: "Unable to delete given command"})
+            res.status(500).json({error: "Suppression d'une commande", detail: e});
           }
         });
   },
@@ -176,9 +179,9 @@ var orders = {
     // retrieve a command line
     db.all("SELECT * FROM Command_Lines WHERE Id = ?", req.params.id, function(e, r){
       if(e == null && r[0] != null){
-        res.status(200).json(r[0]).end();
+        res.status(200).json(r[0]);
       }else{
-        res.status(500).json({error: "Unable to get command line"}).end();
+        res.status(500).json({error: "Récuperation d'une ligne de commande", detail: e}).end();
       }
     });
   },
@@ -206,10 +209,10 @@ var orders = {
                       [req.body.amount, r[0].Id, req.body.product_id],
                         function(result, error) {
                           if(error == null && this.changes != 0) {
-                            res.status(200).json({id: r[0].Id, message: "Successfully inserted command line"}).end();
+                            res.status(200).json({id: r[0].Id, message: "Successfully inserted command line"});
                           }
                           else {
-                            res.status(500).json({error: "Unable to add line to command"}).end();
+                            res.status(500).json({error: "Création d'une ligne de commande", detail: error}).end();
                           }
                         }
                       );
@@ -219,17 +222,17 @@ var orders = {
                     db.run("UPDATE Command_Lines SET Amount = Amount + ? WHERE Id = ?", [req.body.amount, re[0].Id],
                       function(result, error) {
                         if(error == null && this.changes != 0) {
-                          res.status(200).json({id: r[0].Id, message: "Successfully updated command line"}).end();
+                          res.status(200).json({id: r[0].Id, message: "Successfully updated command line"});
                         }
                         else {
-                          res.status(500).json({error: "Unable to add line to command"}).end();
+                          res.status(500).json({error: "Modification d'une ligne de commande", detail: error}).end();
                         }
                       }
                     );
                   }
                 }
                 else {
-                  res.status(500).json({error: "Couldn't retrieve command lines with such command_id and product_id"}).end();
+                  res.status(500).json({error: "Récuperation d'une ligne de commande", detail: err}).end();
                 }
               }
             );
@@ -243,20 +246,20 @@ var orders = {
                       db.run("INSERT INTO Command_Lines(Amount, Command_Id, Product_Id) VALUES(?, ?, ?);",
                           [req.body.amount, this.lastID, req.body.product_id], function(error, result) {
                             if(error == null && this.changes != 0) {
-                              res.status(200).json({id: this.lastID, message: "Successfully created command & added command line"}).end();
+                              res.status(200).json({id: this.lastID, message: "Successfully created command & added command line"});
                             }else{
-                              res.status(500).json({error: "Unable to add line to command"}).end();
+                              res.status(500).json({error: "Création d'une ligne de commande", detail: error}).end();
                             }
                           });
 
                     } else {
-                      res.status(500).json({error: "Couldn't insert command into database"}).end();
+                      res.status(500).json({error: "Modification d'une commande", detail: er}).end();
                     }
                 });
             }
           }
           else {
-            res.status(500).json({error: "Error retrieving user command."}).end();
+            res.status(500).json({error: "Récuperation d'une commande", detail: e}).end();
           }
         }
       );
@@ -277,7 +280,7 @@ var orders = {
             // get total itemcount and price
             db.all("select sum(Amount) as total, sum(Amount * Price) as totalPrice from Command_Lines, Products where Command_Lines.Command_Id = ? and Products.Id = Command_Lines.Product_Id;",
             r[0].Id, function(e_fckcbacks, r_fckcbacks){
-              if(e_fckcbacks == null){
+              if(e_fckcbacks == null && r_fckcbacks.length != 0){
                 //console.log(r_fckcbacks);
                 // eventually render json (ouf!)
                 res.status(200).json({
@@ -286,19 +289,19 @@ var orders = {
                   totalQuantity: r_fckcbacks[0].total,
                   creationDate: r[0].Creation_Date,
                   lines: result
-                }).end();
+                });
               }else{
-                res.status(500).json({error: "Unable to retrieve total price and item count"}).end();
+                res.status(500).json({error: "Récuperation d'une commande", detail: e_fckcbacks}).end();
               }
             })
           } else {
             //console.log(error);
-            res.status(500).json({error: "Unable to get last unpaid command's lines"}).end();
+            res.status(500).json({error: "Recuperation des lignes de commande", detail: error}).end();
           }
         });
 
       }else{
-        res.status(500).json({error: "Unable to get last unpaid command for given user id"}).end();
+        res.status(500).json({error: "Récuperation d'une commande", detail: e}).end();
       }
     });
   },
@@ -311,7 +314,7 @@ var orders = {
             [req.body.amount, req.body.command_id, req.body.product_id, req.params.id],
     function(e, r){
       if(e == null && this.changes != 0){
-        res.status(200).json({message: "Line update successfull"}).end();
+        res.status(200).json({message: "Line update successfull"});
       }else {
         res.status(500).json({error: "Unable to update line"}).end();
       }
@@ -322,9 +325,9 @@ var orders = {
     // delete a given command line
     db.run("delete from Command_Lines where Command_Id = ? AND Id = ?", [req.params.commandId, req.params.id], function(e, r){
       if(e == null && this.changes != null){
-        res.status(200).json({message: "Deleted command line successfully"}).end();
+        res.status(200).json({message: "Deleted command line successfully"});
       }else {
-        res.status(500).json({error: "Unable to delete command line"}).end();
+        res.status(500).json({error: "Suppression d'une ligne de commande", detail: e}).end();
       }
     });
   },
@@ -335,21 +338,21 @@ var orders = {
     if(req.body.userTokens >= req.body.commandTotal) {
       db.run("UPDATE Commands SET Is_Paid = 1 WHERE Id = ?", [req.body.command_id], function(err, resu) {
         if(err == null && this.changes != null) {
-          res.status(200).json({message: "Commande effectuée avec succès."}).end();
+          res.status(200).json({message: "Commande effectuée avec succès."});
         }
         else {
-          res.status(500).json({error: "Error Checking Out", detail: err}).end();
+          res.status(500).json({error: "Paiement", detail: err}).end();
         }
       });
       db.run("UPDATE Users SET Tokens = Tokens - ? WHERE Id = ?", [req.body.commandTotal, req.body.user_id], function(err, resu) {
         //console.log(req.body, this);
         if(err != null && this.changes == null) {
-          res.status(500).json({error: "Error Checking Out", detail: err}).end();
+          res.status(500).json({error: "Paiement", detail: err}).end();
         }
       });
     }
     else {
-      res.status(500).json({error: "Error Checking Out", detail: "Pas assez de tokens pour payer cette commande."}).end();
+      res.status(500).json({error: "Paiement", detail: "Pas assez de tokens pour payer cette commande."}).end();
     }
   }
 
