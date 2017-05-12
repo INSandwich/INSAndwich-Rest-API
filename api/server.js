@@ -15,7 +15,7 @@ app.get('/', function(req, res) {
   res.json({
     message: "Welcome, this is the root of INSAndwich API."
   });
-  console.log("Client connected");
+  //console.log("Client connected");
 });
 
 
@@ -24,6 +24,6 @@ app.use(cors({origin: '*'}));
 app.use(controllers);
 
 app.listen(port);
-console.log("Visit http://localhost:"+port);
+//console.log("Visit http://localhost:"+port);
 
 module.exports = app;

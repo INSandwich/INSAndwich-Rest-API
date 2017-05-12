@@ -106,7 +106,7 @@ var orders = {
 
             for (i = 0; i < result.length; i++) {
                 totalPrice = totalPrice + (parseFloat(result[i].Amount)*parseFloat(result[i].Price));
-                console.log("TotalPrice", totalPrice);
+                //console.log("TotalPrice", totalPrice);
             }
 
             if(error == null)
@@ -119,7 +119,7 @@ var orders = {
                 lines : result
               });
             } else {
-              console.log(error);
+              //console.log(error);
               res.status(500).json({error : "Unable to get command's lines"});
             }
         });
@@ -134,7 +134,7 @@ var orders = {
     // requires user id
     var date = new Date();
     var formattedDate = date.toLocaleDateString();
-    console.log(formattedDate);
+    //console.log(formattedDate);
     db.run("INSERT INTO Commands(User_id, Creation_Date) VALUES(?, ?);", req.params.id, formattedDate, function(e, r){
       if(e == null && this.changes != 0)
       {
@@ -228,7 +228,7 @@ var orders = {
             );
           }
           else { // The user doesn't have an unpaid command -> create it and insert the line
-          console.log("The user doesn't have an unpaid command -> create it and insert the line");
+          //console.log("The user doesn't have an unpaid command -> create it and insert the line");
               db.run("INSERT INTO Commands (User_id, Creation_Date) VALUES (?, ?);",
                   [req.body.user_id, date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()], function(er, re){
                     if(er == null && this.changes != 0)
@@ -285,7 +285,7 @@ var orders = {
               }
             })
           } else {
-            console.log(error);
+            //console.log(error);
             res.status(500).json({error: "Unable to get last unpaid command's lines"}).end();
           }
         });
@@ -335,7 +335,7 @@ var orders = {
         }
       });
       db.run("UPDATE Users SET Tokens = Tokens - ? WHERE Id = ?", [req.body.commandTotal, req.body.user_id], function(err, resu) {
-        console.log(req.body, this);
+        //console.log(req.body, this);
         if(err != null && this.changes == null) {
           res.status(500).json({error: "Error Checking Out", detail: err}).end();
         }

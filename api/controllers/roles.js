@@ -15,7 +15,7 @@ var roles = {
     }
     db.all("SELECT * FROM Roles LIMIT ? OFFSET ?", [pageSize, pageNumber],
       function(e, r) {
-        console.log(r);
+        //console.log(r);
         if((r.length != 0) && (e == null)) {
           res.status(200).json({
             pageSize: pageSize,

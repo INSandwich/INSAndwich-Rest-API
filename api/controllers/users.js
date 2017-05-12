@@ -57,7 +57,7 @@ var users = {
 
   //router.post('/auth', users.auth);
   auth: function(req, res) {
-    console.log(req.body);
+    //console.log(req.body);
     var rand = function() {
         return Math.random().toString(36).substr(2); // remove `0.`
     };
@@ -316,7 +316,7 @@ var users = {
     db.all("SELECT Password FROM Users WHERE Id = ?", req.params.id,
       function(e, r) {
         if( (e == null) && (r.length != 0) ) {
-          console.log(r[0].Password, newPassword);
+          //console.log(r[0].Password, newPassword);
           //Checking if older password is okay
           //console.log(r[0].Password, password);
           if(password == r[0].Password && newPassword != 0){
@@ -356,7 +356,7 @@ var users = {
     var LastName = req.body.lastname;
     var Login = req.body.login;
     var Adresse = req.body.adresse;
-    console.log(email, FirstName, LastName, Login, Adresse)
+    //console.log(email, FirstName, LastName, Login, Adresse)
 
     //We check the mail
     if(!(IsEmail.validate(email))) {

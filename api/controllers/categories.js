@@ -79,7 +79,7 @@ var categories = {
   delete: function(req, res) {
     db.run("DELETE FROM Category WHERE Id=?", req.params.id,
       function(e, r) {
-        console.log(this);
+        //console.log(this);
         if ((e == null) && (this.changes != 0)) {
           res.status(200).json({
             message: "Category deleted successfully."

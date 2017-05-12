@@ -24,7 +24,7 @@ var products = {
       function(e, r){
         if((r.length !=0) && ( e == null)){
           itemCount = r[0].count;
-          console.log("r = ", itemCount);
+          //console.log("r = ", itemCount);
           pageCount = roundUp(itemCount/pageSize,1);
           //console.log("PageCount = ",pageCount);
         }else if(r.length == 0){
@@ -85,7 +85,7 @@ var products = {
       function(e, r){
         if((r.length !=0) && ( e == null)){
           var itemCount = r[0].count;
-          console.log("r = ", itemCount);
+          //console.log("r = ", itemCount);
           pageCount = roundUp(itemCount/pageSize,1);
           //console.log("PageCount = ",pageCount);
         }else if(r.length == 0){
@@ -156,13 +156,13 @@ var products = {
   },
 
   update: function(req, res) {
-    console.log(req.body);
-    console.log(req.params.id);
+    //console.log(req.body);
+    //console.log(req.params.id);
     // expect full data to update and dumps updates missing any data
     db.run("UPDATE Products SET Name = ?, Description = ?,  Available = ?, Image = ?, Price = ?, Category_Id = ? WHERE Id = ?",
     [req.body.name, req.body.description, req.body.available, req.body.image, req.body.price, req.body.category, req.params.id],
     function(e, r){
-      console.log("error status = ", e);
+      //console.log("error status = ", e);
       if ((e == null) && (this.changes != 0)) {
         res.status(200).json({
           Id : req.params.id,
