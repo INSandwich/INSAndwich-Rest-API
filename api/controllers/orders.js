@@ -76,7 +76,7 @@ var orders = {
       from Commands, Command_Lines, Products\
       where Commands.Id = Command_Lines.Command_Id and Commands.User_Id = ?\
       and Command_Lines.Product_Id = Products.Id and Commands.Is_Paid != 0 group by Command_Lines.Command_Id\
-      ORDER BY Commands.Id desc\
+      ORDER BY Commands.Id\
       LIMIT ? OFFSET ?;",
       req.params.id,pageSize, pageNumber*pageSize,
       function(e, r){
